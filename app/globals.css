@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/* Light: soft grays + restrained orange accent */
+:root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --border: #e5e5e5;
+  --primary: #9a3412;
+  --primary-foreground: #fff7ed;
+  --accent: #c2410c;
+  --accent-muted: #fff7ed;
+  --accent-subtle: #fef3c7;
+  --card: #ffffff;
+  --ring: #c2410c;
+  --code-bg: #f5f5f5;
+}
+
+/* Dark: #1e2022 background + soft orange accent */
+.dark {
+  --background: #1e2022;
+  --foreground: #fafafa;
+  --muted: #2d3032;
+  --muted-foreground: #a3a3a3;
+  --border: #404040;
+  --primary: #ea580c;
+  --primary-foreground: #1c1917;
+  --accent: #f97316;
+  --accent-muted: #292524;
+  --accent-subtle: #422006;
+  --card: #252729;
+  --ring: #ea580c;
+  --code-bg: #1e2022;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-card: var(--card);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ========== Markdown / Prose (docs-style) ========== */
+.prose {
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.prose h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.prose p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.prose ul,
+.prose ol {
+  display: block;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.625rem;
+  list-style-position: outside;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  display: list-item;
+  margin-top: 0.25rem;
+  padding-left: 0.25rem;
+  color: var(--foreground);
+}
+
+.prose ul li {
+  list-style-type: disc;
+}
+
+.prose ol li {
+  list-style-type: decimal;
+}
+
+.prose li::marker {
+  color: var(--muted-foreground);
+}
+
+.prose blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-left: 4px solid var(--border);
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.prose hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Code: inline */
+.prose :not(pre) > code {
+  font-size: 0.875em;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  background: var(--muted);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+}
+
+/* Code: block (with highlight.js) */
+.prose pre {
+  margin: 1rem 0;
+  padding: 0;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  display: block;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+/* highlight.js: use our code-bg; light mode needs darker text */
+.prose pre code.hljs {
+  background: var(--code-bg);
+}
+
+:root .prose pre code.hljs {
+  color: #383a42;
+}
+
+.dark .prose pre code.hljs {
+  color: #abb2bf;
+}
+
+/* Tables (GFM) */
+.prose table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.prose thead th {
+  border-bottom: 2px solid var(--border);
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.prose tbody td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  color: var(--foreground);
+}
+
+.prose tbody tr:hover {
+  background: var(--muted);
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose em {
+  color: var(--muted-foreground);
+}
