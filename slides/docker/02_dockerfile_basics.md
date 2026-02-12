@@ -4,7 +4,7 @@ A **Dockerfile** is a text file that defines how to build a Docker image.
 
 ## Basic structure
 
-```
+```dockerfile
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -28,6 +28,26 @@ CMD ["node", "index.js"]
 ```bash
 docker build -t my-app .
 docker run -p 3000:3000 my-app
+```
+```bash
+docker build -t my-app .
+docker run -p 3000:3000 my-app
+```
+```bash
+docker build -t my-app .
+docker run -p 3000:3000 my-app
+```
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactMarkdown from 'react-markdown';
+
+const input = '# This is a header\n\nAnd this is a paragraph'
+
+ReactDOM.render(
+  <ReactMarkdown source={input} />,
+  document.getElementById('container')
+)
 ```
 
 Use `-t` to tag the image. Use `-p` to map host port to container port.

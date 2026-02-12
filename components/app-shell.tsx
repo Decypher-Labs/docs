@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Navbar } from "./navbar";
-import { Sidebar } from "./sidebar";
+import { Sidebar, SIDEBAR_DEFAULT } from "./sidebar";
+import { SidebarResizeHandle } from "./sidebar-resize-handle";
+import { Footer } from "./footer";
 import type { SlideFolder } from "@/lib/slides";
 import { useMediaQuery } from "./use-media-query";
+
+const SIDEBAR_WIDTH_KEY = "docs-sidebar-width";
 
 type AppShellProps = {
   tree: SlideFolder[];
@@ -12,9 +17,36 @@ type AppShellProps = {
 };
 
 export function AppShell({ tree, children }: AppShellProps) {
+  const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(SIDEBAR_WIDTH_KEY);
+      if (stored) {
+        const w = Number(stored);
+        if (w >= 220 && w <= 380) setSidebarWidth(w);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sidebarWidth === SIDEBAR_DEFAULT) return;
+    try {
+      localStorage.setItem(SIDEBAR_WIDTH_KEY, String(sidebarWidth));
+    } catch {
+      /* ignore */
+    }
+  }, [sidebarWidth]);
+
+  useEffect(() => {
+    setCollapsed(pathname === "/");
+  }, [pathname]);
 
   const sidebarVisible = isMobile ? mobileOpen : !collapsed;
 
@@ -28,15 +60,18 @@ export function AppShell({ tree, children }: AppShellProps) {
   };
 
   return (
-    <>
-      <Navbar onMenuClick={() => setMobileOpen(true)} showMenuButton={isMobile} />
-      <div className="flex min-h-[calc(100vh-3.5rem)]">
-        {/* Backdrop for mobile sidebar */}
+    <div className="flex min-h-screen flex-col bg-mesh">
+      <Navbar
+        tree={tree}
+        onMenuClick={() => setMobileOpen(true)}
+        showMenuButton={isMobile}
+      />
+      <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-3 sm:gap-4">
         {isMobile && sidebarVisible && (
           <button
             type="button"
             onClick={closeSidebar}
-            className="fixed inset-0 z-40 bg-foreground/20 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-foreground/10 backdrop-blur-sm lg:hidden"
             aria-label="Close sidebar"
           />
         )}
@@ -46,13 +81,17 @@ export function AppShell({ tree, children }: AppShellProps) {
           onToggle={toggleSidebar}
           isMobile={isMobile}
           onClose={closeSidebar}
+          width={sidebarWidth}
         />
+        {!isMobile && sidebarVisible && (
+          <SidebarResizeHandle width={sidebarWidth} onWidthChange={setSidebarWidth} />
+        )}
         <main className="min-w-0 flex-1">
           {!isMobile && !sidebarVisible && (
             <button
               type="button"
               onClick={() => (isMobile ? setMobileOpen(true) : setCollapsed(false))}
-              className="fixed left-2 top-16 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-primary shadow-sm hover:bg-accent-muted focus:outline-none focus:ring-2 focus:ring-ring sm:left-4"
+              className="glass-panel fixed left-2 top-16 z-40 flex h-10 w-10 items-center justify-center rounded-xl border border-border/50 text-primary shadow-lg transition-colors hover:bg-white/50 dark:hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-ring sm:left-4"
               aria-label="Open sidebar"
             >
               <svg
@@ -74,6 +113,7 @@ export function AppShell({ tree, children }: AppShellProps) {
           {children}
         </main>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }

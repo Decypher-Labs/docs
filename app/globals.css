@@ -1,37 +1,43 @@
 @import "tailwindcss";
 
-/* Light: soft grays + restrained orange accent */
+/* Light: soft slate + emerald, less flat */
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
-  --border: #e5e5e5;
-  --primary: #9a3412;
-  --primary-foreground: #fff7ed;
-  --accent: #c2410c;
-  --accent-muted: #fff7ed;
-  --accent-subtle: #fef3c7;
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --muted: #e2e8f0;
+  --muted-foreground: #475569;
+  --border: #cbd5e1;
+  --primary: #047857;
+  --primary-foreground: #ecfdf5;
+  --accent: #059669;
+  --accent-muted: #a7f3d0;
+  --accent-subtle: #d1fae5;
   --card: #ffffff;
-  --ring: #c2410c;
-  --code-bg: #f5f5f5;
+  --ring: #047857;
+  --code-bg: #e2e8f0;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(203, 213, 225, 0.8);
+  --glass-blur: 20px;
 }
 
-/* Dark: #1e2022 background + soft orange accent */
+/* Dark: deep slate + emerald accent */
 .dark {
-  --background: #1e2022;
-  --foreground: #fafafa;
-  --muted: #2d3032;
-  --muted-foreground: #a3a3a3;
-  --border: #404040;
-  --primary: #ea580c;
-  --primary-foreground: #1c1917;
-  --accent: #f97316;
-  --accent-muted: #292524;
-  --accent-subtle: #422006;
-  --card: #252729;
-  --ring: #ea580c;
-  --code-bg: #1e2022;
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --primary: #34d399;
+  --primary-foreground: #064e3b;
+  --accent: #6ee7b7;
+  --accent-muted: #064e3b;
+  --accent-subtle: #022c22;
+  --card: #1e293b;
+  --ring: #34d399;
+  --code-bg: #1e293b;
+  --glass: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(51, 65, 85, 0.5);
+  --glass-blur: 24px;
 }
 
 @theme inline {
@@ -47,13 +53,59 @@
   --color-accent-subtle: var(--accent-subtle);
   --color-card: var(--card);
   --color-ring: var(--ring);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+}
+
+.font-brand {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Subtle background decoration */
+.bg-mesh {
+  background-image:
+    radial-gradient(at 40% 20%, var(--accent-subtle) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, var(--accent-muted) 0px, transparent 40%),
+    radial-gradient(at 0% 50%, var(--muted) 0px, transparent 45%),
+    radial-gradient(at 0% 100%, rgba(5, 150, 105, 0.06) 0px, transparent 40%);
+  background-attachment: fixed;
+}
+
+.dark .bg-mesh {
+  background-image:
+    radial-gradient(at 40% 20%, rgba(6, 78, 59, 0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(52, 211, 153, 0.08) 0px, transparent 40%),
+    radial-gradient(at 0% 50%, rgba(30, 41, 59, 0.5) 0px, transparent 45%),
+    radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 45%);
+}
+
+/* Glass panel */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur, 20px);
+  -webkit-backdrop-filter: var(--glass-blur, 20px);
+  border: 1px solid var(--glass-border);
+}
+
+:root .glass-panel {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Navbar: stronger glass so content behind is blurred */
+.navbar-glass {
+  background: var(--glass);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 /* Focus ring for accessibility */
@@ -62,7 +114,7 @@ body {
   outline-offset: 2px;
 }
 
-/* ========== Markdown / Prose (docs-style) ========== */
+/* ========== Markdown / Prose ========== */
 .prose {
   color: var(--foreground);
   font-size: 1rem;
@@ -87,6 +139,7 @@ body {
   padding-bottom: 0.25rem;
   border-bottom: 1px solid var(--border);
   color: var(--foreground);
+  scroll-margin-top: 5rem;
 }
 
 .prose h3 {
@@ -95,6 +148,7 @@ body {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
   color: var(--foreground);
+  scroll-margin-top: 5rem;
 }
 
 .prose p {
@@ -147,9 +201,11 @@ body {
 .prose blockquote {
   margin: 1rem 0;
   padding: 0.5rem 0 0.5rem 1rem;
-  border-left: 4px solid var(--border);
+  border-left: 4px solid var(--primary);
   color: var(--muted-foreground);
   font-style: italic;
+  background: var(--accent-subtle);
+  border-radius: 0 0.375rem 0.375rem 0;
 }
 
 .prose hr {
@@ -168,39 +224,87 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Code: block (with highlight.js) */
+/* Code blocks: client-side highlight.js adds .hljs to each pre > code */
 .prose pre {
   margin: 1rem 0;
   padding: 0;
-  overflow-x: auto;
-  border-radius: 0.5rem;
+  overflow: hidden;
   border: 1px solid var(--border);
+  border-radius: 0.5rem;
   background: var(--code-bg);
-  font-size: 0.875rem;
-  line-height: 1.6;
 }
 
 .prose pre code {
-  display: block;
   padding: 1rem 1.25rem;
-  background: transparent;
-  color: inherit;
-  font-size: inherit;
-  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  display: block;
   overflow-x: auto;
-}
-
-/* highlight.js: use our code-bg; light mode needs darker text */
-.prose pre code.hljs {
   background: var(--code-bg);
 }
 
-:root .prose pre code.hljs {
-  color: #383a42;
+.prose pre code.hljs {
+  background: var(--code-bg) !important;
 }
 
+/* Light: syntax highlight readable on light bg */
+.prose pre code.hljs {
+  color: #334155;
+}
+
+:root .prose pre code.hljs .hljs-keyword,
+:root .prose pre code.hljs .hljs-selector-tag,
+:root .prose pre code.hljs .hljs-built_in {
+  color: #047857;
+}
+
+:root .prose pre code.hljs .hljs-string,
+:root .prose pre code.hljs .hljs-attr {
+  color: #0d9488;
+}
+
+:root .prose pre code.hljs .hljs-number {
+  color: #c026d3;
+}
+
+:root .prose pre code.hljs .hljs-comment {
+  color: #64748b;
+  font-style: italic;
+}
+
+:root .prose pre code.hljs .hljs-title,
+:root .prose pre code.hljs .hljs-section {
+  color: #7c3aed;
+}
+
+/* Dark: syntax highlight tuned to slate + emerald */
 .dark .prose pre code.hljs {
-  color: #abb2bf;
+  color: #94a3b8;
+}
+
+.dark .prose pre code.hljs .hljs-keyword,
+.dark .prose pre code.hljs .hljs-selector-tag,
+.dark .prose pre code.hljs .hljs-built_in {
+  color: #34d399;
+}
+
+.dark .prose pre code.hljs .hljs-string,
+.dark .prose pre code.hljs .hljs-attr {
+  color: #6ee7b7;
+}
+
+.dark .prose pre code.hljs .hljs-number {
+  color: #f472b6;
+}
+
+.dark .prose pre code.hljs .hljs-comment {
+  color: #64748b;
+  font-style: italic;
+}
+
+.dark .prose pre code.hljs .hljs-title,
+.dark .prose pre code.hljs .hljs-section {
+  color: #c4b5fd;
 }
 
 /* Tables (GFM) */
@@ -209,11 +313,13 @@ body {
   margin: 1rem 0;
   border-collapse: collapse;
   font-size: 0.9375rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 .prose thead th {
   border-bottom: 2px solid var(--border);
-  border-top: 1px solid var(--border);
   padding: 0.5rem 0.75rem;
   text-align: left;
   font-weight: 600;

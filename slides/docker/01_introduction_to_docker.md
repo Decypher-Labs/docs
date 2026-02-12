@@ -25,7 +25,7 @@ Containers are isolated from each other and from the host system, but share the 
 
 ## Getting started
 
-```
+```bash
 docker run hello-world
 ```
 
