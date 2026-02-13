@@ -6,12 +6,7 @@ import hljs from "highlight.js";
 
 /** Normalize language for highlight.js (e.g. "bash" and "shell" are both supported). */
 function getLanguage(block: HTMLElement): string | null {
-  const raw =
-    typeof block.className === "string"
-      ? block.className
-      : Array.isArray(block.className)
-        ? block.className.join(" ")
-        : block.getAttribute?.("class") || "";
+  const raw = block.getAttribute?.("class") ?? block.className ?? "";
   const m = raw.match(/\blanguage-(\S+)/);
   if (!m) return null;
   const lang = m[1].toLowerCase();
