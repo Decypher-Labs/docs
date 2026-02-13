@@ -56,7 +56,7 @@ export default async function DocPage({ params }: PageProps) {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 sm:py-6 lg:px-4">
       <div className="flex gap-3 sm:gap-4">
-        <article className="min-w-0 flex-1">
+        <article className="min-w-0 flex-1 max-w-4xl">
           <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg sm:p-8 md:p-10">
             <header className="mb-8 border-b border-border/60 pb-6">
               <Breadcrumb
@@ -80,7 +80,7 @@ export default async function DocPage({ params }: PageProps) {
             <DocNav prev={prev} next={next} />
           </div>
         </article>
-        <aside className="hidden w-52 shrink-0 xl:block">
+        <aside className="hidden w-64 shrink-0 xl:block">
           <OnThisPage headings={headings} editHref={editHref} />
         </aside>
       </div>

@@ -11,7 +11,7 @@ const YOUTUBE_URL = "https://youtube.com/@decypherlabs";
 
 const SIDEBAR_MIN = 220;
 const SIDEBAR_MAX = 380;
-export const SIDEBAR_DEFAULT = 256;
+export const SIDEBAR_DEFAULT = 300;
 
 type SidebarProps = {
   tree: SlideFolder[];
@@ -37,7 +37,7 @@ export function Sidebar({
 
   const content = (
     <>
-      <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border/40 px-4 pt-5 sm:pt-6">
+      <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border/40 px-4">
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {isMobile ? "Navigation" : "Contents"}
         </span>
@@ -64,9 +64,9 @@ export function Sidebar({
           )}
         </div>
       </div>
-      <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-3">
+      <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-4">
         {isMobile && (
-          <ul className="mb-4 space-y-1 border-b border-border/40 pb-4">
+          <ul className="mb-6 space-y-1 border-b border-border/40 pb-6">
             <li>
               <Link
                 href="/"
@@ -126,8 +126,8 @@ export function Sidebar({
           </ul>
         )}
         {isMobile && tree.length > 0 && (
-          <div className="mb-4">
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="mb-3">
+            <span className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Contents
             </span>
           </div>
@@ -171,10 +171,12 @@ export function Sidebar({
 
   return (
     <aside
-      className="glass-panel flex min-h-0 shrink-0 flex-col overflow-hidden rounded-r-xl border-r border-border/50 shadow-sm transition-[width] duration-200 self-stretch"
+      className="glass-panel flex min-h-0 shrink-0 flex-col overflow-hidden rounded-r-xl shadow-sm transition-[width] duration-200"
       style={{
-        width: asideWidth,
-        minWidth: collapsed ? 0 : SIDEBAR_MIN,
+        width: collapsed ? 0 : `${width}px`,
+        minWidth: collapsed ? 0 : `${SIDEBAR_MIN}px`,
+        maxWidth: collapsed ? 0 : `${width}px`,
+        flexShrink: 0,
       }}
     >
       {content}

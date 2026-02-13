@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GripVertical } from "lucide-react";
 
 const SIDEBAR_MIN = 220;
@@ -13,10 +13,26 @@ type SidebarResizeHandleProps = {
 
 export function SidebarResizeHandle({ width, onWidthChange }: SidebarResizeHandleProps) {
   const [isResizing, setIsResizing] = useState(false);
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(0);
+
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsResizing(true);
+      startXRef.current = e.clientX;
+      startWidthRef.current = width;
+    },
+    [width]
+  );
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      const newWidth = Math.min(SIDEBAR_MAX, Math.max(SIDEBAR_MIN, e.clientX));
+      const deltaX = e.clientX - startXRef.current;
+      const newWidth = Math.min(
+        SIDEBAR_MAX,
+        Math.max(SIDEBAR_MIN, startWidthRef.current + deltaX)
+      );
       onWidthChange(newWidth);
     },
     [onWidthChange]
@@ -44,11 +60,8 @@ export function SidebarResizeHandle({ width, onWidthChange }: SidebarResizeHandl
       aria-orientation="vertical"
       aria-valuenow={width}
       tabIndex={0}
-      onMouseDown={(e) => {
-        e.preventDefault();
-        setIsResizing(true);
-      }}
-      className="group flex w-2 shrink-0 cursor-col-resize items-center justify-center border-r border-transparent transition-colors hover:border-primary/20 hover:bg-primary/5"
+      onMouseDown={handleMouseDown}
+      className="group flex w-2 shrink-0 cursor-col-resize items-center justify-center border-r border-border/50 transition-colors hover:border-primary/30 hover:bg-primary/5"
     >
       <GripVertical className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
     </div>

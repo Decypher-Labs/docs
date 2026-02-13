@@ -100,7 +100,7 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
         showMenuButton={isMobile}
         mobileMenuOpen={isMobile ? mobileOpen : false}
       />
-      <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-2 sm:gap-3">
+      <div className="flex min-h-[calc(100vh-3.5rem)] flex-1">
         {isMobile && sidebarVisible && (
           <button
             type="button"
@@ -110,7 +110,13 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
           />
         )}
         {shouldRenderSidebar && (
-          <>
+          <div
+            className="flex shrink-0"
+            style={{
+              width: isMobile || !sidebarVisible ? undefined : `${sidebarWidth + 8}px`, // sidebar width + resize handle width (8px)
+              flexShrink: 0,
+            }}
+          >
             <Sidebar
               tree={tree}
               collapsed={!sidebarVisible}
@@ -122,9 +128,9 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
             {!isMobile && sidebarVisible && (
               <SidebarResizeHandle width={sidebarWidth} onWidthChange={setSidebarWidth} />
             )}
-          </>
+          </div>
         )}
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1" style={{ paddingLeft: shouldRenderSidebar && !isMobile && sidebarVisible ? '12px' : undefined }}>
           {showSidebar && !isMobile && !sidebarVisible && (
             <button
               type="button"
