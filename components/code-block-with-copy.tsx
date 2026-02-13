@@ -25,7 +25,7 @@ export function CodeBlockWithCopy({ children }: CodeBlockWithCopyProps) {
       <button
         type="button"
         onClick={copy}
-        className="absolute right-2 top-2 z-10 flex items-center gap-1.5 rounded-md border border-border bg-card/90 px-2.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring opacity-0 group-hover/code:opacity-100"
+        className="absolute right-2 top-2 z-10 flex items-center gap-1.5 rounded-md border border-border bg-card/90 px-2.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm transition-all hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         aria-label="Copy code"
       >
         {copied ? (

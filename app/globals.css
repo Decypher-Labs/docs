@@ -100,13 +100,14 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* Navbar: solid background for better reading progress bar visibility */
+/* Navbar: stronger glass so content behind is blurred */
 .navbar-glass {
   background: var(--glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  --webkit-backdrop-filter: 0px 0px 0px 0px var(--glass-border);
   border-bottom: 1px solid var(--glass-border);
 }
+
 
 /* Focus ring for accessibility */
 *:focus-visible {

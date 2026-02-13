@@ -80,21 +80,26 @@ export function Navbar({
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent("open-search"))}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="hidden md:inline-flex h-9 items-center gap-2 rounded-xl border border-border/50 bg-card/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-ring"
+          aria-label="Search (⌘K)"
+          title="Search (⌘K)"
+        >
+          <Search className="h-4 w-4 shrink-0" />
+          <span className="hidden lg:inline">Search</span>
+          <kbd className="hidden xl:inline-flex items-center gap-1 rounded border border-border/60 bg-muted/50 px-1.5 py-0.5 text-xs font-medium">
+            <span className="text-[10px]">⌘</span>
+            <span>K</span>
+          </kbd>
+        </button>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("open-search"))}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
           aria-label="Search (⌘K)"
           title="Search (⌘K)"
         >
           <Search className="h-4 w-4" />
         </button>
-        <a
-          href={YOUTUBE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden items-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20 sm:inline-flex"
-        >
-          <Youtube className="h-4 w-4" />
-          Watch
-        </a>
         {mounted && (
           <button
             type="button"
