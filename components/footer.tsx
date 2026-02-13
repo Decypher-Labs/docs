@@ -10,8 +10,8 @@ import {
 const SOCIAL_LINKS = [
   { label: "YouTube", href: "https://youtube.com/@decypherlabs", icon: Youtube },
   { label: "LinkedIn", href: "https://linkedin.com/in/decypherlabs", icon: Linkedin },
-  { label: "Twitter", href: "https://twitter.com/decypherlabs", icon: Twitter },
-  { label: "Discord", href: "https://discord.gg/decypherlabs", icon: MessageCircle },
+  { label: "Twitter", href: "https://x.com/io_decypherlabs", icon: Twitter },
+  { label: "Discord", href: "https://discord.gg/NvznJsbV", icon: MessageCircle },
 ] as const;
 
 export function Footer() {

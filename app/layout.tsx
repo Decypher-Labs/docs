@@ -18,6 +18,9 @@ const syne = Syne({
 export const metadata: Metadata = {
   title: "DecypherLabs Docs",
   description: "Documentation and slides",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

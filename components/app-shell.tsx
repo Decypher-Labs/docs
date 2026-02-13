@@ -66,7 +66,7 @@ export function AppShell({ tree, children }: AppShellProps) {
         onMenuClick={() => setMobileOpen(true)}
         showMenuButton={isMobile}
       />
-      <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-3 sm:gap-4">
+      <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-2 sm:gap-3">
         {isMobile && sidebarVisible && (
           <button
             type="button"

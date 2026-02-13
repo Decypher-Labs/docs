@@ -79,3 +79,32 @@ export function getAllSlideParams(): { folder: string; slug: string }[] {
   }
   return params;
 }
+
+/** Flat list of docs in sidebar order: { folder, slug, title } */
+export function getFlatDocList(): { folder: string; slug: string; title: string }[] {
+  const tree = getSlidesTree();
+  const list: { folder: string; slug: string; title: string }[] = [];
+  for (const f of tree) {
+    for (const file of f.files) {
+      list.push({ folder: f.name, slug: file.slug, title: file.title });
+    }
+  }
+  return list;
+}
+
+/** Get previous and next doc for a given folder/slug. */
+export function getPrevNext(
+  folder: string,
+  slug: string
+): {
+  prev: { folder: string; slug: string; title: string } | null;
+  next: { folder: string; slug: string; title: string } | null;
+} {
+  const list = getFlatDocList();
+  const i = list.findIndex((d) => d.folder === folder && d.slug === slug);
+  if (i < 0) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? list[i - 1]! : null,
+    next: i < list.length - 1 ? list[i + 1]! : null,
+  };
+}
