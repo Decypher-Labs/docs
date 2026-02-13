@@ -59,19 +59,21 @@ export default async function DocPage({ params }: PageProps) {
         <article className="min-w-0 flex-1 max-w-4xl">
           <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg sm:p-8 md:p-10">
             <header className="mb-8 border-b border-border/60 pb-6">
-              <Breadcrumb
-                items={[
-                  { label: "Docs", href: firstDoc ?? "/" },
-                  {
-                    label: folderMeta?.title ?? folder,
-                    href:
-                      folderMeta?.files[0] != null
-                        ? `/${folder}/${folderMeta.files[0].slug}`
-                        : undefined,
-                  },
-                  { label: pageTitle },
-                ]}
-              />
+              <div className="hidden md:block">
+                <Breadcrumb
+                  items={[
+                    { label: "Docs", href: firstDoc ?? "/" },
+                    {
+                      label: folderMeta?.title ?? folder,
+                      href:
+                        folderMeta?.files[0] != null
+                          ? `/${folder}/${folderMeta.files[0].slug}`
+                          : undefined,
+                    },
+                    { label: pageTitle },
+                  ]}
+                />
+              </div>
               <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                 {pageTitle}
               </h1>

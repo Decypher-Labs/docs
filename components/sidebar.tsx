@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { ChevronDown, ChevronRight, FileText, Folder, X, Home, BookOpen, Youtube } from "lucide-react";
 import type { SlideFolder } from "@/lib/slides";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const YOUTUBE_URL = "https://youtube.com/@decypherlabs";
 
@@ -196,8 +196,18 @@ function FolderSection({
   isMobile?: boolean;
 }) {
   // On mobile, folders start closed; on desktop, they start open
-  const [open, setOpen] = useState(!isMobile);
+  const [open, setOpen] = useState(() => {
+    // Always start closed on mobile, open on desktop
+    return isMobile === true ? false : true;
+  });
   const basePath = `/${folder.name}`;
+
+  // Close folders when switching to mobile view
+  useEffect(() => {
+    if (isMobile && open) {
+      setOpen(false);
+    }
+  }, [isMobile]);
 
   return (
     <li>
