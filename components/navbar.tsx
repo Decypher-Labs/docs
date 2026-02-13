@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Youtube, BookOpen, Menu } from "lucide-react";
+import { Moon, Sun, Youtube, BookOpen, Menu, X, Search, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SlideFolder } from "@/lib/slides";
 
@@ -10,11 +10,17 @@ type NavbarProps = {
   tree: SlideFolder[];
   onMenuClick?: () => void;
   showMenuButton?: boolean;
+  mobileMenuOpen?: boolean;
 };
 
 const YOUTUBE_URL = "https://youtube.com/@decypherlabs";
 
-export function Navbar({ tree, onMenuClick, showMenuButton = false }: NavbarProps) {
+export function Navbar({
+  tree,
+  onMenuClick,
+  showMenuButton = false,
+  mobileMenuOpen = false,
+}: NavbarProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -52,6 +58,13 @@ export function Navbar({ tree, onMenuClick, showMenuButton = false }: NavbarProp
               Docs
             </Link>
           )}
+          <Link
+            href="/blogs"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+          >
+            <FileText className="h-4 w-4" />
+            Blogs
+          </Link>
           <a
             href={YOUTUBE_URL}
             target="_blank"
@@ -64,16 +77,15 @@ export function Navbar({ tree, onMenuClick, showMenuButton = false }: NavbarProp
         </nav>
       </div>
       <div className="flex shrink-0 items-center gap-2">
-        {showMenuButton && (
-          <button
-            type="button"
-            onClick={onMenuClick}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring lg:hidden"
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5 text-foreground" />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("open-search"))}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          aria-label="Search (⌘K)"
+          title="Search (⌘K)"
+        >
+          <Search className="h-4 w-4" />
+        </button>
         <a
           href={YOUTUBE_URL}
           target="_blank"
@@ -94,6 +106,20 @@ export function Navbar({ tree, onMenuClick, showMenuButton = false }: NavbarProp
               <Sun className="h-4 w-4" />
             ) : (
               <Moon className="h-4 w-4" />
+            )}
+          </button>
+        )}
+        {showMenuButton && (
+          <button
+            type="button"
+            onClick={onMenuClick}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring lg:hidden"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5 text-foreground" />
+            ) : (
+              <Menu className="h-5 w-5 text-foreground" />
             )}
           </button>
         )}

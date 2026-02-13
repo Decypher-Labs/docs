@@ -9,8 +9,8 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6 md:py-8 lg:px-8">
-      {/* Hero */}
-      <section className="text-center">
+      {/* Hero: centered in viewport (x and y) */}
+      <section className="flex min-h-[calc(55vh-3.5rem)] flex-col items-center justify-center text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
           <Youtube className="h-4 w-4" />
           DevOps &amp; Development — learn by doing
@@ -21,7 +21,7 @@ export default function HomePage() {
           <span className="text-primary font-medium">Labs</span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Free tutorials and docs for DevOps and software development. Follow along on YouTube and use this site for written notes and references.
+          Tutorials, docs, and blogs for DevOps and software development. Watch on YouTube and use this site for written guides and references.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           {firstFile && firstFolder ? (
@@ -53,7 +53,7 @@ export default function HomePage() {
           </div>
           <h2 className="mt-4 text-xl font-semibold text-foreground">DevOps</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Containers, CI/CD, Kubernetes, cloud, and infrastructure as code. Practical, step-by-step guides you can run locally or in the cloud.
+            Containers, CI/CD, Kubernetes, and cloud. Step-by-step guides you can run locally or in the cloud.
           </p>
           <Link
             href={firstFile && firstFolder ? `/${firstFolder.name}/${firstFile.slug}` : "#"}
@@ -69,7 +69,7 @@ export default function HomePage() {
           </div>
           <h2 className="mt-4 text-xl font-semibold text-foreground">Development</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Backend, APIs, tooling, and best practices. Code-along sessions and written references to level up your dev workflow.
+            Backend, APIs, and tooling. Code-along sessions and written references to level up your workflow.
           </p>
           <Link
             href={firstFile && firstFolder ? `/${firstFolder.name}/${firstFile.slug}` : "#"}
@@ -89,9 +89,9 @@ export default function HomePage() {
               <BookOpen className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Docs &amp; slides</h2>
+              <h2 className="text-lg font-semibold text-foreground">Docs &amp; blogs</h2>
               <p className="text-sm text-muted-foreground">
-                Use the sidebar to jump to any topic. Each page has an “On this page” menu for quick navigation.
+                Use the sidebar to jump to any doc topic. Each page has an “On this page” menu for quick navigation. Blogs are full-width reads.
               </p>
             </div>
           </div>

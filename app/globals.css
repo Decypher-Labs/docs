@@ -103,8 +103,8 @@ body {
 /* Navbar: stronger glass so content behind is blurred */
 .navbar-glass {
   background: var(--glass);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -112,6 +112,16 @@ body {
 *:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Search command: no green focus ring on input or dialog */
+[data-search-command] input:focus,
+[data-search-command] input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+[data-search-command]:focus-within {
+  border-color: var(--border) !important;
 }
 
 /* ========== Markdown / Prose ========== */

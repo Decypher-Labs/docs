@@ -5,6 +5,7 @@ import { getHeadings, stripFirstMatchingHeading } from "@/lib/markdown-utils";
 import { MarkdownContent } from "@/components/markdown-content";
 import { OnThisPage } from "@/components/on-this-page";
 import { DocNav } from "@/components/doc-nav";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { Folder } from "lucide-react";
 
 type PageProps = {
@@ -47,17 +48,31 @@ export default async function DocPage({ params }: PageProps) {
 
   const { prev, next } = getPrevNext(folder, slug);
 
+  const firstDoc =
+    tree[0]?.files[0] != null
+      ? `/${tree[0].name}/${tree[0].files[0].slug}`
+      : null;
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 sm:py-6 lg:px-4">
       <div className="flex gap-3 sm:gap-4">
         <article className="min-w-0 flex-1">
           <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg sm:p-8 md:p-10">
             <header className="mb-8 border-b border-border/60 pb-6">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Folder className="h-4 w-4" />
-                <span>{folderMeta?.title}</span>
-              </div>
-              <h1 className="mt-2 text-xl font-bold tracking-tight text-foreground sm:text-2xl md:text-3xl">
+              <Breadcrumb
+                items={[
+                  { label: "Docs", href: firstDoc ?? "/" },
+                  {
+                    label: folderMeta?.title ?? folder,
+                    href:
+                      folderMeta?.files[0] != null
+                        ? `/${folder}/${folderMeta.files[0].slug}`
+                        : undefined,
+                  },
+                  { label: pageTitle },
+                ]}
+              />
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                 {pageTitle}
               </h1>
             </header>

@@ -7,16 +7,41 @@ import { Sidebar, SIDEBAR_DEFAULT } from "./sidebar";
 import { SidebarResizeHandle } from "./sidebar-resize-handle";
 import { Footer } from "./footer";
 import type { SlideFolder } from "@/lib/slides";
+import type { BlogPost } from "@/lib/blogs";
 import { useMediaQuery } from "./use-media-query";
+import { SearchCommand } from "./search-command";
 
 const SIDEBAR_WIDTH_KEY = "docs-sidebar-width";
 
+type SearchItem = { title: string; href: string; type: "doc" | "blog" };
+
 type AppShellProps = {
   tree: SlideFolder[];
+  blogs: BlogPost[];
   children: React.ReactNode;
 };
 
-export function AppShell({ tree, children }: AppShellProps) {
+function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[]): SearchItem[] {
+  const docItems: SearchItem[] = [];
+  for (const f of tree) {
+    for (const file of f.files) {
+      docItems.push({
+        title: file.title,
+        href: `/${f.name}/${file.slug}`,
+        type: "doc",
+      });
+    }
+  }
+  const blogItems: SearchItem[] = blogs.map((b) => ({
+    title: b.title,
+    href: `/blogs/${b.slug}`,
+    type: "blog",
+  }));
+  return [...docItems, ...blogItems];
+}
+
+export function AppShell({ tree, blogs, children }: AppShellProps) {
+  const searchItems = buildSearchItems(tree, blogs);
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -48,6 +73,7 @@ export function AppShell({ tree, children }: AppShellProps) {
     setCollapsed(pathname === "/");
   }, [pathname]);
 
+  const showSidebar = pathname !== "/" && !pathname.startsWith("/blogs");
   const sidebarVisible = isMobile ? mobileOpen : !collapsed;
 
   const closeSidebar = () => {
@@ -61,13 +87,15 @@ export function AppShell({ tree, children }: AppShellProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-mesh">
+      <SearchCommand items={searchItems} />
       <Navbar
         tree={tree}
-        onMenuClick={() => setMobileOpen(true)}
+        onMenuClick={toggleSidebar}
         showMenuButton={isMobile}
+        mobileMenuOpen={isMobile ? mobileOpen : false}
       />
       <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-2 sm:gap-3">
-        {isMobile && sidebarVisible && (
+        {showSidebar && isMobile && sidebarVisible && (
           <button
             type="button"
             onClick={closeSidebar}
@@ -75,19 +103,23 @@ export function AppShell({ tree, children }: AppShellProps) {
             aria-label="Close sidebar"
           />
         )}
-        <Sidebar
-          tree={tree}
-          collapsed={!sidebarVisible}
-          onToggle={toggleSidebar}
-          isMobile={isMobile}
-          onClose={closeSidebar}
-          width={sidebarWidth}
-        />
-        {!isMobile && sidebarVisible && (
-          <SidebarResizeHandle width={sidebarWidth} onWidthChange={setSidebarWidth} />
+        {showSidebar && (
+          <>
+            <Sidebar
+              tree={tree}
+              collapsed={!sidebarVisible}
+              onToggle={toggleSidebar}
+              isMobile={isMobile}
+              onClose={closeSidebar}
+              width={sidebarWidth}
+            />
+            {!isMobile && sidebarVisible && (
+              <SidebarResizeHandle width={sidebarWidth} onWidthChange={setSidebarWidth} />
+            )}
+          </>
         )}
         <main className="min-w-0 flex-1">
-          {!isMobile && !sidebarVisible && (
+          {showSidebar && !isMobile && !sidebarVisible && (
             <button
               type="button"
               onClick={() => (isMobile ? setMobileOpen(true) : setCollapsed(false))}
