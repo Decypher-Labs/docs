@@ -87,6 +87,50 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               </HeadingWithLink>
             );
           },
+          code({ node, className, children, ...rest }) {
+            // Extract language from node properties or className prop
+            // Only process block code (inside pre), not inline code
+            let langClass: string | undefined;
+            
+            // Try to get from node.properties.className (array from hast)
+            if (node?.properties) {
+              const props = node.properties as { className?: string | string[] };
+              if (props.className) {
+                const classValue = Array.isArray(props.className) 
+                  ? props.className[0] 
+                  : props.className;
+                if (classValue) {
+                  langClass = typeof classValue === "string" ? classValue : String(classValue);
+                }
+              }
+            }
+            
+            // Fallback to className prop if not found
+            if (!langClass && className) {
+              langClass = Array.isArray(className) ? className[0] : className;
+              if (langClass) langClass = String(langClass);
+            }
+            
+            // Normalize to language-* format for highlight.js
+            let finalClassName: string | undefined;
+            if (langClass) {
+              // Remove "language-" prefix if present, then add it back consistently
+              const lang = langClass.replace(/^language-/, "");
+              finalClassName = `language-${lang}`;
+            }
+            
+            // Merge with any existing className from rest props
+            const existingClass = (rest as { className?: string }).className;
+            const mergedClass = [finalClassName, existingClass]
+              .filter(Boolean)
+              .join(" ");
+            
+            return (
+              <code {...rest} className={mergedClass || undefined}>
+                {children}
+              </code>
+            );
+          },
           pre({ children }) {
             return (
               <CodeBlockWithCopy>

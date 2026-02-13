@@ -137,7 +137,7 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
             )}
           </div>
         )}
-        <main className="min-w-0 flex-1" style={{ paddingLeft: shouldRenderSidebar && !isMobile && sidebarVisible ? '12px' : undefined }}>
+        <main className="min-w-0 flex-1 min-h-[calc(100vh-3.5rem)]" style={{ paddingLeft: shouldRenderSidebar && !isMobile && sidebarVisible ? '12px' : undefined }}>
           {showSidebar && !isMobile && !sidebarVisible && (
             <button
               type="button"

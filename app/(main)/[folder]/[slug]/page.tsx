@@ -115,13 +115,13 @@ export default async function DocPage({ params }: PageProps) {
                 </div>
               </header>
               <MarkdownContent content={content} />
-              <ShareButtons title={pageTitle} url={pageUrl} />
               <RelatedArticles
                 currentFolder={folder}
                 currentSlug={slug}
                 tree={tree}
                 blogs={blogs}
               />
+              <ShareButtons title={pageTitle} url={pageUrl} />
               <DocNav prev={prev} next={next} />
             </div>
           </article>

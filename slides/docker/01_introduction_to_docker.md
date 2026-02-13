@@ -39,7 +39,3 @@ In the following slides we'll cover:
 2. Dockerfile basics
 3. Docker Compose for multi-container apps
 4. Best practices
-
----
-
-*Happy containerizing!*

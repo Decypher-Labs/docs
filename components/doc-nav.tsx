@@ -9,7 +9,7 @@ type DocNavProps = {
 export function DocNav({ prev, next }: DocNavProps) {
   return (
     <nav
-      className="mt-10 flex flex-col gap-3 border-t border-border/60 pt-6 sm:flex-row sm:justify-between"
+      className="mt-8 flex flex-col gap-3 border-t border-border/60 pt-6 sm:flex-row sm:justify-between"
       aria-label="Document navigation"
     >
       <div className="min-w-0 flex-1">

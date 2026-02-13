@@ -83,7 +83,7 @@ export function RelatedArticles({
   if (related.length === 0) return null;
 
   return (
-    <div className="mt-12 border-t border-border/60 pt-8">
+    <section className="mt-8 border-t border-border/60 pt-6" aria-label="Related articles">
       <h2 className="mb-4 text-lg font-semibold text-foreground">Related articles</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((item) => (
@@ -112,6 +112,6 @@ export function RelatedArticles({
           </Link>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

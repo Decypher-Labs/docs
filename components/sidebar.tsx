@@ -171,12 +171,14 @@ export function Sidebar({
 
   return (
     <aside
-      className="glass-panel flex min-h-0 shrink-0 flex-col overflow-hidden rounded-r-xl shadow-sm transition-[width] duration-200"
+      className="glass-panel flex shrink-0 flex-col overflow-hidden rounded-r-xl shadow-sm transition-[width] duration-200 sticky top-14 self-start"
       style={{
         width: collapsed ? 0 : `${width}px`,
         minWidth: collapsed ? 0 : `${SIDEBAR_MIN}px`,
         maxWidth: collapsed ? 0 : `${width}px`,
         flexShrink: 0,
+        minHeight: "calc(100vh - 3.5rem)",
+        maxHeight: "calc(100vh - 3.5rem)",
       }}
     >
       {content}

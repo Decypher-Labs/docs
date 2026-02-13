@@ -41,9 +41,9 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 border-t border-border/60 pt-6 mt-6">
-      <span className="text-sm font-medium text-muted-foreground">Share:</span>
-      <div className="flex items-center gap-2">
+    <section className="mt-8 border-t border-border/60 pt-6" aria-label="Share">
+      <h2 className="mb-4 text-lg font-semibold text-foreground">Share this article</h2>
+      <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={shareToTwitter}
           className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground hover:border-primary/40"
@@ -78,6 +78,6 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
           )}
         </button>
       </div>
-    </div>
+    </section>
   );
 }
