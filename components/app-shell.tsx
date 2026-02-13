@@ -74,6 +74,9 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
   }, [pathname]);
 
   const showSidebar = pathname !== "/" && !pathname.startsWith("/blogs");
+  // On mobile/tablet, sidebar is always available via hamburger menu
+  // On desktop, sidebar only shows on doc pages
+  const shouldRenderSidebar = showSidebar || isMobile;
   const sidebarVisible = isMobile ? mobileOpen : !collapsed;
 
   const closeSidebar = () => {
@@ -81,8 +84,11 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
   };
 
   const toggleSidebar = () => {
-    if (isMobile) setMobileOpen((o) => !o);
-    else setCollapsed((c) => !c);
+    if (isMobile) {
+      setMobileOpen((o) => !o);
+    } else {
+      setCollapsed((c) => !c);
+    }
   };
 
   return (
@@ -95,7 +101,7 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
         mobileMenuOpen={isMobile ? mobileOpen : false}
       />
       <div className="flex min-h-[calc(100vh-3.5rem)] flex-1 gap-2 sm:gap-3">
-        {showSidebar && isMobile && sidebarVisible && (
+        {isMobile && sidebarVisible && (
           <button
             type="button"
             onClick={closeSidebar}
@@ -103,7 +109,7 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
             aria-label="Close sidebar"
           />
         )}
-        {showSidebar && (
+        {shouldRenderSidebar && (
           <>
             <Sidebar
               tree={tree}

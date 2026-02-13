@@ -11,7 +11,7 @@ export default function HomePage() {
     <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6 md:py-8 lg:px-8">
       {/* Hero: centered in viewport (x and y) */}
       <section className="flex min-h-[calc(55vh-3.5rem)] flex-col items-center justify-center text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary sm:text-sm">
           <Youtube className="h-4 w-4" />
           DevOps &amp; Development — learn by doing
         </div>

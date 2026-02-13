@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { ChevronDown, ChevronRight, FileText, Folder, X } from "lucide-react";
+import { ChevronDown, ChevronRight, FileText, Folder, X, Home, BookOpen, Youtube } from "lucide-react";
 import type { SlideFolder } from "@/lib/slides";
 import { useState } from "react";
+
+const YOUTUBE_URL = "https://youtube.com/@decypherlabs";
 
 const SIDEBAR_MIN = 220;
 const SIDEBAR_MAX = 380;
@@ -29,12 +31,15 @@ export function Sidebar({
   width = SIDEBAR_DEFAULT,
 }: SidebarProps) {
   const pathname = usePathname();
+  const firstDoc = tree[0]?.files[0]
+    ? `/${tree[0].name}/${tree[0].files[0].slug}`
+    : null;
 
   const content = (
     <>
       <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border/40 px-4 pt-5 sm:pt-6">
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Contents
+          {isMobile ? "Navigation" : "Contents"}
         </span>
         <div className="flex items-center gap-0.5">
           {isMobile && onClose && (
@@ -60,6 +65,73 @@ export function Sidebar({
         </div>
       </div>
       <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-3">
+        {isMobile && (
+          <ul className="mb-4 space-y-1 border-b border-border/40 pb-4">
+            <li>
+              <Link
+                href="/"
+                onClick={onClose}
+                className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+                  pathname === "/"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                }`}
+              >
+                <Home className="h-4 w-4 shrink-0" />
+                <span>Home</span>
+              </Link>
+            </li>
+            {firstDoc && (
+              <li>
+                <Link
+                  href={firstDoc}
+                  onClick={onClose}
+                  className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+                    pathname.startsWith(`/${tree[0].name}`)
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  }`}
+                >
+                  <BookOpen className="h-4 w-4 shrink-0" />
+                  <span>Docs</span>
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link
+                href="/blogs"
+                onClick={onClose}
+                className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+                  pathname.startsWith("/blogs")
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                }`}
+              >
+                <FileText className="h-4 w-4 shrink-0" />
+                <span>Blogs</span>
+              </Link>
+            </li>
+            <li>
+              <a
+                href={YOUTUBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onClose}
+                className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+              >
+                <Youtube className="h-4 w-4 shrink-0" />
+                <span>YouTube</span>
+              </a>
+            </li>
+          </ul>
+        )}
+        {isMobile && tree.length > 0 && (
+          <div className="mb-4">
+            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Contents
+            </span>
+          </div>
+        )}
         {tree.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border/60 bg-muted/30 px-3 py-4 text-center text-sm text-muted-foreground">
             Add folders and <code className="rounded bg-muted px-1">.md</code> files in{" "}
@@ -73,6 +145,7 @@ export function Sidebar({
                 folder={folder}
                 pathname={pathname}
                 onLinkClick={isMobile ? onClose : undefined}
+                isMobile={isMobile}
               />
             ))}
           </ul>
@@ -113,12 +186,15 @@ function FolderSection({
   folder,
   pathname,
   onLinkClick,
+  isMobile = false,
 }: {
   folder: SlideFolder;
   pathname: string;
   onLinkClick?: () => void;
+  isMobile?: boolean;
 }) {
-  const [open, setOpen] = useState(true);
+  // On mobile, folders start closed; on desktop, they start open
+  const [open, setOpen] = useState(!isMobile);
   const basePath = `/${folder.name}`;
 
   return (
