@@ -40,6 +40,14 @@ export function getBlogContent(slug: string): string | null {
   return fs.readFileSync(filePath, "utf-8");
 }
 
+/** Get file modification time for a blog */
+export function getBlogModificationTime(slug: string): Date | null {
+  const filePath = path.join(BLOGS_DIR, `${slug}.md`);
+  if (!fs.existsSync(filePath)) return null;
+  const stats = fs.statSync(filePath);
+  return stats.mtime;
+}
+
 /** Get all blog slugs for generateStaticParams */
 export function getAllBlogSlugs(): string[] {
   return getBlogsList().map((p) => p.slug);

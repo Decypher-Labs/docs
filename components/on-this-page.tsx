@@ -61,6 +61,15 @@ export function OnThisPage({ headings, editHref }: OnThisPageProps) {
             <li key={h.id}>
               <Link
                 href={`${pathname}#${h.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.getElementById(h.id);
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
+                    // Update URL without scrolling
+                    window.history.pushState(null, "", `${pathname}#${h.id}`);
+                  }
+                }}
                 className={`block rounded-r-md border-l-2 py-1.5 pl-3 pr-2 text-sm transition-all duration-200 hover:border-primary/50 hover:bg-muted/60 hover:text-primary hover:pl-4 ${
                   isActive
                     ? "border-primary bg-primary/10 font-medium text-primary"

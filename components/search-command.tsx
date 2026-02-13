@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, FileText, BookOpen } from "lucide-react";
+import { Search, FileText, BookOpen, Keyboard } from "lucide-react";
+import { KeyboardShortcuts } from "./keyboard-shortcuts";
 
 export type SearchItem = {
   title: string;
@@ -17,6 +18,7 @@ type SearchCommandProps = {
 export function SearchCommand({ items }: SearchCommandProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
 
@@ -46,7 +48,17 @@ export function SearchCommand({ items }: SearchCommandProps) {
         e.preventDefault();
         openSearch();
       }
-      if (e.key === "Escape") closeSearch();
+      if (e.key === "Escape") {
+        if (shortcutsOpen) {
+          setShortcutsOpen(false);
+        } else {
+          closeSearch();
+        }
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "/") {
+        e.preventDefault();
+        setShortcutsOpen(true);
+      }
     };
     const onOpenSearch = () => openSearch();
     window.addEventListener("keydown", onKeyDown);
@@ -55,7 +67,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("open-search", onOpenSearch);
     };
-  }, [openSearch, closeSearch]);
+  }, [openSearch, closeSearch, shortcutsOpen]);
 
   useEffect(() => {
     if (!open) return;
@@ -107,6 +119,14 @@ export function SearchCommand({ items }: SearchCommandProps) {
             style={{ outline: "none", boxShadow: "none" }}
             autoFocus
           />
+          <button
+            onClick={() => setShortcutsOpen(true)}
+            className="hidden rounded border border-border/60 bg-muted/50 p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:flex"
+            aria-label="Keyboard shortcuts"
+            title="Keyboard shortcuts (⌘/)"
+          >
+            <Keyboard className="h-3.5 w-3.5" />
+          </button>
           <kbd className="hidden rounded border border-border/60 bg-muted/50 px-2 py-0.5 text-xs text-muted-foreground sm:inline">
             ESC
           </kbd>
@@ -149,9 +169,17 @@ export function SearchCommand({ items }: SearchCommandProps) {
           <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">↑</kbd>{" "}
           <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">↓</kbd> to
           navigate · <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">↵</kbd> to
-          select
+          select ·{" "}
+          <button
+            onClick={() => setShortcutsOpen(true)}
+            className="text-primary hover:underline"
+          >
+            <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">⌘</kbd>{" "}
+            <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">/</kbd> for shortcuts
+          </button>
         </div>
       </div>
+      <KeyboardShortcuts open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
     </>
   );
 }

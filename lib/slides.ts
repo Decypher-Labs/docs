@@ -68,6 +68,14 @@ export function getMarkdownContent(folder: string, fileSlug: string): string | n
   return fs.readFileSync(filePath, "utf-8");
 }
 
+/** Get file modification time for a file */
+export function getFileModificationTime(folder: string, fileSlug: string): Date | null {
+  const filePath = path.join(SLIDES_DIR, folder, `${fileSlug}.md`);
+  if (!fs.existsSync(filePath)) return null;
+  const stats = fs.statSync(filePath);
+  return stats.mtime;
+}
+
 /** Get all [folder, slug] pairs for generateStaticParams */
 export function getAllSlideParams(): { folder: string; slug: string }[] {
   const tree = getSlidesTree();
