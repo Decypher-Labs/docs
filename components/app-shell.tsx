@@ -10,6 +10,7 @@ import type { SlideFolder } from "@/lib/slides";
 import type { BlogPost } from "@/lib/blogs";
 import { useMediaQuery } from "./use-media-query";
 import { SearchCommand } from "./search-command";
+import { ThemeTransition } from "./theme-transition";
 
 const SIDEBAR_WIDTH_KEY = "docs-sidebar-width";
 
@@ -73,6 +74,11 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
     setCollapsed(pathname === "/");
   }, [pathname]);
 
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+
   const showSidebar = pathname !== "/" && !pathname.startsWith("/blogs");
   // On mobile/tablet, sidebar is always available via hamburger menu
   // On desktop, sidebar only shows on doc pages
@@ -93,6 +99,7 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-mesh">
+      <ThemeTransition />
       <SearchCommand items={searchItems} />
       <Navbar
         tree={tree}

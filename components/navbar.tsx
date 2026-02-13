@@ -23,8 +23,16 @@ export function Navbar({
 }: NavbarProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [iconKey, setIconKey] = useState(0);
 
   useEffect(() => setMounted(true), []);
+
+  // Trigger icon animation on theme change
+  useEffect(() => {
+    if (mounted) {
+      setIconKey((prev) => prev + 1);
+    }
+  }, [theme, mounted]);
 
   const firstDoc = tree[0]?.files[0]
     ? `/${tree[0].name}/${tree[0].files[0].slug}`
@@ -104,14 +112,17 @@ export function Navbar({
           <button
             type="button"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-white/50 text-muted-foreground transition-colors hover:bg-white/70 hover:text-foreground dark:bg-white/10 dark:hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-white/50 text-muted-foreground overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-white/70 hover:text-foreground dark:bg-white/10 dark:hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-ring group"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
+            <span key={iconKey} className="relative z-10 transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4 theme-icon-transition" />
+              ) : (
+                <Moon className="h-4 w-4 theme-icon-transition" />
+              )}
+            </span>
+            <span className="absolute inset-0 rounded-xl bg-primary/10 opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:opacity-100" />
           </button>
         )}
         {showMenuButton && (

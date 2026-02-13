@@ -70,7 +70,7 @@ export function OnThisPage({ headings, editHref }: OnThisPageProps) {
                     window.history.pushState(null, "", `${pathname}#${h.id}`);
                   }
                 }}
-                className={`block rounded-r-md border-l-2 py-1.5 pl-3 pr-2 text-sm transition-all duration-200 hover:border-primary/50 hover:bg-muted/60 hover:text-primary hover:pl-4 ${
+                className={`block rounded-r-md border-l-2 py-1.5 pl-3 pr-2 text-sm transition-[color,background-color,border-color] duration-300 hover:border-primary/50 hover:bg-muted/60 hover:text-primary hover:pl-4 ${
                   isActive
                     ? "border-primary bg-primary/10 font-medium text-primary"
                     : "border-transparent"
