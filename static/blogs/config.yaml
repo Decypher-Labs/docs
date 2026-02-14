@@ -1,0 +1,6 @@
+# Override heading, description, or excerpt for blog cards. Slug = filename without .md
+blogs:
+  - slug: getting-started
+    heading: Getting Started
+    description: Welcome to the DecypherLabs blog.
+    excerpt: Welcome to the DecypherLabs blog. Articles on DevOps, development, and more.

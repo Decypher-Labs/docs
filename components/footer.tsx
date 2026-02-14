@@ -1,29 +1,19 @@
 import Link from "next/link";
-import {
-  Youtube,
-  Twitter,
-  MessageCircle,
-  ExternalLink,
-} from "lucide-react";
-
-// Better LinkedIn icon SVG
-const LinkedInIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-  </svg>
-);
+import { Youtube, Twitter, MessageCircle, Github, Linkedin, Coffee } from "lucide-react";
+import { GITHUB_ORG_URL, BUYMEACOFFEE_URL } from "@/lib/site-config";
+import { Tooltip } from "@/components/tooltip";
 
 const SOCIAL_LINKS = [
-  { label: "YouTube", href: "https://youtube.com/@decypherlabs", icon: Youtube },
-  { label: "LinkedIn", href: "https://linkedin.com/in/decypherlabs", icon: LinkedInIcon },
-  { label: "Twitter", href: "https://x.com/io_decypherlabs", icon: Twitter },
-  { label: "Discord", href: "https://discord.gg/NvznJsbV", icon: MessageCircle },
+  { label: "GitHub", tooltip: "Follow on GitHub", href: GITHUB_ORG_URL, icon: Github },
+  { label: "YouTube", tooltip: "Watch on YouTube", href: "https://youtube.com/@decypherlabs", icon: Youtube },
+  { label: "Buy Me a Coffee", tooltip: "Support us on Buy Me a Coffee", href: BUYMEACOFFEE_URL, icon: Coffee },
+  { label: "LinkedIn", tooltip: "Connect on LinkedIn", href: "https://linkedin.com/in/decypherlabs", icon: Linkedin },
+  { label: "Twitter", tooltip: "Follow on Twitter", href: "https://x.com/io_decypherlabs", icon: Twitter },
+  { label: "Discord", tooltip: "Join Discord community", href: "https://discord.gg/NvznJsbV", icon: MessageCircle },
 ] as const;
+
+const iconButtonClass =
+  "flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
 
 export function Footer() {
   return (
@@ -41,23 +31,19 @@ export function Footer() {
             DevOps &amp; Development — learn by doing.
           </p>
         </div>
-        <nav
-          className="flex flex-wrap items-center justify-center gap-4"
-          aria-label="Social links"
-        >
-          {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-primary"
-              aria-label={label}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{label}</span>
-              <ExternalLink className="h-3 w-3 opacity-60" />
-            </a>
+        <nav className="flex items-center gap-1" aria-label="Social and community links">
+          {SOCIAL_LINKS.map(({ label, tooltip, href, icon: Icon }) => (
+            <Tooltip key={label} content={tooltip} side="top">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={iconButtonClass}
+                aria-label={label}
+              >
+                <Icon className="h-5 w-5" />
+              </a>
+            </Tooltip>
           ))}
         </nav>
       </div>

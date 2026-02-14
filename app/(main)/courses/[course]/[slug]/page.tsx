@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  getSlidesTree,
-  getMarkdownContent,
-  getAllSlideParams,
-  getPrevNext,
-  getFileModificationTime,
-  resolveDocPrettyUrl,
-  getDocPrettyUrl,
-} from "@/lib/slides";
+  getCourseBySlug,
+  getGuideContent,
+  getAllGuideParams,
+  getGuidePrevNext,
+  getGuideModificationTime,
+  resolveGuideUrlSlug,
+} from "@/lib/courses";
 import { getHeadings, stripFirstMatchingHeading } from "@/lib/markdown-utils";
 import { calculateReadingTime, formatReadingTime } from "@/lib/reading-time";
 import { MarkdownContent } from "@/components/markdown-content";
@@ -18,65 +17,52 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { ReadingProgress } from "@/components/reading-progress";
 import { ShareButtons } from "@/components/share-buttons";
 import { ReactionButtons } from "@/components/reaction-buttons";
-import { RelatedArticles } from "@/components/related-articles";
-import { getBlogsList } from "@/lib/blogs";
-import { Folder, Clock, Calendar } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 
 type PageProps = {
-  params: Promise<{ folder: string; slug: string }>;
+  params: Promise<{ course: string; slug: string }>;
 };
 
 export function generateStaticParams() {
-  return getAllSlideParams().map(({ folder, slug }) => ({
-    folder,
-    slug,
-  }));
+  return getAllGuideParams().map(({ course, slug }) => ({ course, slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { folder: prettyFolder, slug: prettySlug } = await params;
-  const resolved = resolveDocPrettyUrl(prettyFolder, prettySlug);
-  if (!resolved) return { title: "Docs | DecypherLabs" };
-  const tree = getSlidesTree();
-  const folderMeta = tree.find((f) => f.name === resolved.folder);
-  const fileMeta = folderMeta?.files.find((f) => f.slug === resolved.fileSlug);
-  const title = fileMeta?.title ?? prettySlug;
-  return { title: `${title} | DecypherLabs Docs` };
+  const { course, slug: urlSlug } = await params;
+  const courseMeta = getCourseBySlug(course);
+  const fileMeta = courseMeta?.files.find((f) => f.slug === urlSlug);
+  const title = fileMeta?.title ?? urlSlug;
+  return { title: `${title} | DecypherLabs Guides` };
 }
 
-export default async function DocPage({ params }: PageProps) {
-  const { folder: prettyFolder, slug: prettySlug } = await params;
-  const resolved = resolveDocPrettyUrl(prettyFolder, prettySlug);
+export default async function GuidePage({ params }: PageProps) {
+  const { course: courseSlug, slug: urlSlug } = await params;
+  const resolved = resolveGuideUrlSlug(courseSlug, urlSlug);
   if (!resolved) notFound();
 
-  const { folder, fileSlug: slug } = resolved;
-  const rawContent = getMarkdownContent(folder, slug);
+  const { fileSlug } = resolved;
+  const rawContent = getGuideContent(courseSlug, fileSlug);
   if (rawContent === null) notFound();
 
-  const tree = getSlidesTree();
-  const blogs = getBlogsList();
-  const folderMeta = tree.find((f) => f.name === folder);
-  const fileMeta = folderMeta?.files.find((f) => f.slug === slug);
-  const pageTitle = fileMeta?.title ?? slug;
+  const courseMeta = getCourseBySlug(courseSlug);
+  if (!courseMeta) notFound();
+  const fileMeta = courseMeta.files.find((f) => f.slug === urlSlug);
+  const pageTitle = fileMeta?.title ?? urlSlug;
 
   const content = stripFirstMatchingHeading(rawContent, pageTitle);
   const headings = getHeadings(content);
   const readingTime = calculateReadingTime(content);
-  const lastUpdated = getFileModificationTime(folder, slug);
+  const lastUpdated = getGuideModificationTime(courseSlug, fileSlug);
 
-  const githubEditBase = "https://github.com/Decypher-Labs/docs/edit/main";
-  const editHref = fileMeta?.filename
-    ? `${githubEditBase}/static/docs/${folder}/${fileMeta.filename}`
-    : null;
+  const { prev, next } = getGuidePrevNext(courseSlug, urlSlug);
+  const prevDoc = prev ? { folder: prev.course, slug: prev.slug, title: prev.title } : null;
+  const nextDoc = next ? { folder: next.course, slug: next.slug, title: next.title } : null;
 
-  const { prev, next } = getPrevNext(folder, slug);
-
-  const firstDoc =
-    tree[0]?.files[0] != null
-      ? getDocPrettyUrl(tree[0].name, tree[0].files[0].slug)
-      : null;
-
-  const pageUrl = getDocPrettyUrl(folder, slug);
+  const firstFile = courseMeta.files[0];
+  const courseHref = firstFile
+    ? `/courses/${courseSlug}/${firstFile.slug}`
+    : `/courses/${courseSlug}`;
+  const pageUrl = `/courses/${courseSlug}/${urlSlug}`;
 
   return (
     <>
@@ -89,14 +75,8 @@ export default async function DocPage({ params }: PageProps) {
                 <div className="hidden md:block">
                   <Breadcrumb
                     items={[
-                      { label: "Docs", href: firstDoc ?? "/" },
-                      {
-                        label: folderMeta?.title ?? folder,
-                        href:
-                          folderMeta?.files[0] != null
-                            ? getDocPrettyUrl(folder, folderMeta.files[0].slug)
-                            : undefined,
-                      },
+                      { label: "Courses", href: "/courses" },
+                      { label: courseMeta.title, href: courseHref },
                       { label: pageTitle },
                     ]}
                   />
@@ -125,19 +105,12 @@ export default async function DocPage({ params }: PageProps) {
               </header>
               <MarkdownContent content={content} />
               <ReactionButtons />
-              <RelatedArticles
-                currentFolder={folder}
-                currentSlug={slug}
-                tree={tree}
-                blogs={blogs}
-                getDocHref={getDocPrettyUrl}
-              />
               <ShareButtons title={pageTitle} url={pageUrl} />
-              <DocNav prev={prev} next={next} buildDocHref={getDocPrettyUrl} />
+              <DocNav prev={prevDoc} next={nextDoc} basePath="/courses" />
             </div>
           </article>
           <aside className="hidden w-64 shrink-0 xl:block">
-            <OnThisPage headings={headings} editHref={editHref} />
+            <OnThisPage headings={headings} />
           </aside>
         </div>
       </div>

@@ -1,0 +1,9 @@
+# Override heading and description for course cards. Slug = folder name without numbers (e.g. 01_html -> html).
+# To override titles of .md files inside a course, add static/courses/01_html/config.yaml with a "files" array (slug = filename without .md).
+courses:
+  - slug: html
+    heading: HTML
+    description: Learn HTML basics for the web.
+  - slug: css
+    heading: CSS
+    description: Style your pages with CSS.

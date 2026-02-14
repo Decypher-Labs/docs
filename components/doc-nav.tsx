@@ -4,9 +4,24 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 type DocNavProps = {
   prev: { folder: string; slug: string; title: string } | null;
   next: { folder: string; slug: string; title: string } | null;
+  /** e.g. "/courses" for course lesson pages; omit for docs */
+  basePath?: string;
+  /** For doc pages: (folder, slug) => pretty href; used when basePath is not set */
+  buildDocHref?: (folder: string, slug: string) => string;
 };
 
-export function DocNav({ prev, next }: DocNavProps) {
+function buildHref(
+  folder: string,
+  slug: string,
+  basePath?: string,
+  buildDocHref?: (folder: string, slug: string) => string
+) {
+  if (basePath) return `${basePath}/${folder}/${slug}`;
+  if (buildDocHref) return buildDocHref(folder, slug);
+  return `/${folder}/${slug}`;
+}
+
+export function DocNav({ prev, next, basePath, buildDocHref }: DocNavProps) {
   return (
     <nav
       className="mt-8 flex flex-col gap-3 border-t border-border/60 pt-6 sm:flex-row sm:justify-between"
@@ -15,7 +30,7 @@ export function DocNav({ prev, next }: DocNavProps) {
       <div className="min-w-0 flex-1">
         {prev ? (
           <Link
-            href={`/${prev.folder}/${prev.slug}`}
+            href={buildHref(prev.folder, prev.slug, basePath, buildDocHref)}
             className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
           >
             <ChevronLeft className="h-4 w-4 shrink-0" />
@@ -33,7 +48,7 @@ export function DocNav({ prev, next }: DocNavProps) {
       <div className="min-w-0 flex-1 text-right">
         {next ? (
           <Link
-            href={`/${next.folder}/${next.slug}`}
+            href={buildHref(next.folder, next.slug, basePath, buildDocHref)}
             className="group ml-auto flex items-center justify-end gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
           >
             <span className="min-w-0 text-right">

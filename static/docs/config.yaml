@@ -1,0 +1,5 @@
+# Optional overrides for doc folders. Slug = folder name (e.g. 01_docker).
+# If omitted, folder title is derived from name (01_docker -> Docker).
+docs:
+  - slug: "01_docker"
+    heading: Docker

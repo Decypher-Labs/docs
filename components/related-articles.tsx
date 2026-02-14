@@ -9,7 +9,13 @@ type RelatedArticlesProps = {
   tree: SlideFolder[];
   blogs: BlogPost[];
   maxItems?: number;
+  /** (folder, slug) => doc href; used for doc links when provided */
+  getDocHref?: (folder: string, slug: string) => string;
 };
+
+function docHref(folder: string, slug: string, getDocHref?: (f: string, s: string) => string) {
+  return getDocHref ? getDocHref(folder, slug) : `/${folder}/${slug}`;
+}
 
 export function RelatedArticles({
   currentFolder,
@@ -17,6 +23,7 @@ export function RelatedArticles({
   tree,
   blogs,
   maxItems = 3,
+  getDocHref,
 }: RelatedArticlesProps) {
   // If currentFolder is empty, it's a blog post
   const isBlogPost = !currentFolder;
@@ -38,7 +45,7 @@ export function RelatedArticles({
       .flatMap((folder) =>
         folder.files.slice(0, 2).map((file) => ({
           title: file.title,
-          href: `/${folder.name}/${file.slug}`,
+          href: docHref(folder.name, file.slug, getDocHref),
           type: "doc" as const,
         }))
       )
@@ -54,7 +61,7 @@ export function RelatedArticles({
         .slice(0, maxItems)
         .map((file) => ({
           title: file.title,
-          href: `/${currentFolder}/${file.slug}`,
+          href: docHref(currentFolder, file.slug, getDocHref),
           type: "doc" as const,
         })) || [];
 
@@ -63,7 +70,7 @@ export function RelatedArticles({
       .flatMap((folder) =>
         folder.files.slice(0, 2).map((file) => ({
           title: file.title,
-          href: `/${folder.name}/${file.slug}`,
+          href: docHref(folder.name, file.slug, getDocHref),
           type: "doc" as const,
         }))
       )

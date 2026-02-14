@@ -13,6 +13,7 @@ import { OnThisPage } from "@/components/on-this-page";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ReadingProgress } from "@/components/reading-progress";
 import { ShareButtons } from "@/components/share-buttons";
+import { ReactionButtons } from "@/components/reaction-buttons";
 import { RelatedArticles } from "@/components/related-articles";
 import { getSlidesTree } from "@/lib/slides";
 import { Clock, Calendar } from "lucide-react";
@@ -89,6 +90,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </div>
               </header>
               <MarkdownContent content={content} />
+              <ReactionButtons />
               <ShareButtons title={title} url={pageUrl} />
               <RelatedArticles
                 currentFolder=""

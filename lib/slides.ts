@@ -1,7 +1,15 @@
 import fs from "fs";
 import path from "path";
+import { getDocsConfig, getDocsFolderConfig } from "./content-config";
+import {
+  folderNameToPrettySlug,
+  fileSlugToPretty,
+  getDocPrettyUrl,
+} from "./doc-pretty-url";
 
-const SLIDES_DIR = path.join(process.cwd(), "slides");
+export { folderNameToPrettySlug, fileSlugToPretty, getDocPrettyUrl } from "./doc-pretty-url";
+
+const SLIDES_DIR = path.join(process.cwd(), "static", "docs");
 
 export type SlideFile = {
   slug: string;
@@ -23,12 +31,33 @@ function filenameToTitle(filename: string): string {
   return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1).toLowerCase();
 }
 
-/** Get folder display name: docker -> Docker */
+/** Get folder display name: 01_docker -> Docker (strips 01_, 02_ prefix) */
 function folderToTitle(name: string): string {
-  return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  const withoutNumbers = name.replace(/^\d+_?/, "");
+  return withoutNumbers.charAt(0).toUpperCase() + withoutNumbers.slice(1).toLowerCase();
 }
 
-/** Read slides directory and return tree of folders and .md files */
+/** Resolve pretty URL segments to actual folder name and file slug. Returns null if not found. */
+export function resolveDocPrettyUrl(
+  prettyFolder: string,
+  prettySlug: string
+): { folder: string; fileSlug: string } | null {
+  const tree = getSlidesTree();
+  const prettyFolderLower = prettyFolder.toLowerCase();
+  const prettySlugLower = prettySlug.toLowerCase();
+  for (const f of tree) {
+    if (folderNameToPrettySlug(f.name) !== prettyFolderLower) continue;
+    for (const file of f.files) {
+      if (fileSlugToPretty(file.slug) === prettySlugLower) {
+        return { folder: f.name, fileSlug: file.slug };
+      }
+    }
+    return null;
+  }
+  return null;
+}
+
+/** Read slides directory and return tree of folders and .md files. Ordered by 01_, 02_ folder and filename convention. */
 export function getSlidesTree(): SlideFolder[] {
   if (!fs.existsSync(SLIDES_DIR)) {
     return [];
@@ -50,10 +79,17 @@ export function getSlidesTree(): SlideFolder[] {
       }));
 
     if (mdFiles.length > 0) {
+      const defaultFolderTitle = folderToTitle(entry.name);
+      const folderConfig = getDocsConfig().get(entry.name);
+      const fileConfig = getDocsFolderConfig(entry.name);
+      const filesWithTitles = mdFiles.map((f) => ({
+        ...f,
+        title: fileConfig.get(f.slug)?.heading ?? f.title,
+      }));
       folders.push({
         name: entry.name,
-        title: folderToTitle(entry.name),
-        files: mdFiles,
+        title: folderConfig?.heading ?? defaultFolderTitle,
+        files: filesWithTitles,
       });
     }
   }
@@ -76,13 +112,16 @@ export function getFileModificationTime(folder: string, fileSlug: string): Date 
   return stats.mtime;
 }
 
-/** Get all [folder, slug] pairs for generateStaticParams */
+/** Get all [folder, slug] pairs for generateStaticParams (pretty URL segments) */
 export function getAllSlideParams(): { folder: string; slug: string }[] {
   const tree = getSlidesTree();
   const params: { folder: string; slug: string }[] = [];
   for (const folder of tree) {
     for (const file of folder.files) {
-      params.push({ folder: folder.name, slug: file.slug });
+      params.push({
+        folder: folderNameToPrettySlug(folder.name),
+        slug: fileSlugToPretty(file.slug),
+      });
     }
   }
   return params;
@@ -100,7 +139,7 @@ export function getFlatDocList(): { folder: string; slug: string; title: string 
   return list;
 }
 
-/** Get previous and next doc for a given folder/slug. */
+/** Get previous and next doc for a given folder/slug (actual names). Returns items with actual folder/slug; use getDocPrettyUrl for href. */
 export function getPrevNext(
   folder: string,
   slug: string

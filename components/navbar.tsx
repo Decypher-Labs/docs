@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Youtube, BookOpen, Menu, X, Search, FileText } from "lucide-react";
+import { Moon, Sun, Youtube, BookOpen, Menu, X, Search, FileText, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SlideFolder } from "@/lib/slides";
+import { getDocPrettyUrl } from "@/lib/doc-pretty-url";
 
 type NavbarProps = {
   tree: SlideFolder[];
@@ -35,7 +36,7 @@ export function Navbar({
   }, [theme, mounted]);
 
   const firstDoc = tree[0]?.files[0]
-    ? `/${tree[0].name}/${tree[0].files[0].slug}`
+    ? getDocPrettyUrl(tree[0].name, tree[0].files[0].slug)
     : null;
 
   return (
@@ -50,7 +51,7 @@ export function Navbar({
             <span className="text-primary font-medium">Labs</span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
           <Link
             href="/"
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
@@ -66,6 +67,13 @@ export function Navbar({
               Docs
             </Link>
           )}
+          <Link
+            href="/courses"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+          >
+            <GraduationCap className="h-4 w-4" />
+            Courses
+          </Link>
           <Link
             href="/blogs"
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"

@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getSlidesTree } from "@/lib/slides";
-import { BookOpen, Code2, Server, Youtube, FileText, ArrowRight } from "lucide-react";
+import { getSlidesTree, getDocPrettyUrl } from "@/lib/slides";
+import { BookOpen, Code2, Youtube, FileText, ArrowRight } from "lucide-react";
+import { GithubFollowLink } from "@/components/github-follow-link";
 
 export default function HomePage() {
   const tree = getSlidesTree();
@@ -9,99 +10,135 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6 md:py-8 lg:px-8">
-      {/* Hero: centered in viewport (x and y) */}
-      <section className="flex min-h-[calc(55vh-3.5rem)] flex-col items-center justify-center text-center">
+      {/* Hero: centered in viewport (x and y), full height on mobile for true center */}
+      <section className="flex min-h-[calc(70vh-3.5rem)] flex-col items-center justify-center text-center sm:min-h-[calc(60vh-3.5rem)]">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary sm:text-sm">
           <Youtube className="h-4 w-4" />
           DevOps &amp; Development — learn by doing
         </div>
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
           Welcome to{" "}
-          <span className="font-brand font-semibold">Decypher</span>
-          <span className="text-primary font-medium">Labs</span>
+          <span className="inline-block text-4xl font-bold sm:inline sm:text-4xl sm:font-bold md:text-5xl">
+            <span className="font-brand">Decypher</span>
+            <span className="text-primary">Labs</span>
+          </span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Tutorials, docs, and blogs for DevOps and software development. Watch on YouTube and use this site for written guides and references.
+          Tutorials, docs, and blogs for DevOps and software development. Learn by doing — on YouTube and right here.
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          {firstFile && firstFolder ? (
-            <Link
-              href={`/${firstFolder.name}/${firstFile.slug}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-            >
-              <FileText className="h-4 w-4" />
-              Start with docs
-            </Link>
-          ) : null}
+        <div className="mt-8 flex w-full flex-nowrap items-stretch justify-center gap-2 sm:flex-wrap sm:gap-4">
+          <GithubFollowLink variant="button" className="min-w-0 flex-1 justify-center px-3 py-2 text-xs sm:flex-initial sm:px-4 sm:py-2.5 sm:text-sm" />
           <a
             href="https://youtube.com/@decypherlabs"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted/60 hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
           >
-            <Youtube className="h-4 w-4" />
-            Watch on YouTube
+            <Youtube className="h-4 w-4 shrink-0" />
+            <span>Watch on YouTube</span>
           </a>
         </div>
       </section>
 
-      {/* Two pillars */}
-      <section className="mt-16 grid gap-6 sm:grid-cols-2">
-        <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg transition-all hover:border-primary/30 hover:shadow-xl sm:p-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Server className="h-6 w-6" />
-          </div>
-          <h2 className="mt-4 text-xl font-semibold text-foreground">DevOps</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Containers, CI/CD, Kubernetes, and cloud. Step-by-step guides you can run locally or in the cloud.
-          </p>
-          <Link
-            href={firstFile && firstFolder ? `/${firstFolder.name}/${firstFile.slug}` : "#"}
-            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            Browse DevOps docs
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg transition-all hover:border-primary/30 hover:shadow-xl sm:p-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Code2 className="h-6 w-6" />
-          </div>
-          <h2 className="mt-4 text-xl font-semibold text-foreground">Development</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Backend, APIs, and tooling. Code-along sessions and written references to level up your workflow.
-          </p>
-          <Link
-            href={firstFile && firstFolder ? `/${firstFolder.name}/${firstFile.slug}` : "#"}
-            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            Browse dev docs
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+      {/* What's here: list style, not cards */}
+      <section className="mt-20 border-t border-border/60 px-4 pt-16 sm:px-0">
+        <h2 className="text-xl font-bold tracking-tight text-foreground">
+          What&apos;s here
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Everything in one place. Pick what you need.
+        </p>
+        <ul className="mt-8 divide-y divide-border/60">
+          <li>
+            <Link
+              href={firstFile && firstFolder ? getDocPrettyUrl(firstFolder.name, firstFile.slug) : "/"}
+              className="flex flex-col gap-1 py-5 transition-colors hover:text-primary sm:flex-row sm:items-center sm:justify-between sm:py-6"
+            >
+              <div className="flex items-center gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <FileText className="h-5 w-5" />
+                </span>
+                <div>
+                  <span className="font-semibold text-foreground">Docs</span>
+                  <p className="text-sm text-muted-foreground">
+                    Reference guides and slides — Docker, Kubernetes, and more. Copy, run, learn.
+                  </p>
+                </div>
+              </div>
+              <span className="mt-1 flex items-center gap-1 text-sm font-medium text-primary sm:mt-0">
+                Open docs
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/courses"
+              className="flex flex-col gap-1 py-5 transition-colors hover:text-primary sm:flex-row sm:items-center sm:justify-between sm:py-6"
+            >
+              <div className="flex items-center gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <BookOpen className="h-5 w-5" />
+                </span>
+                <div>
+                  <span className="font-semibold text-foreground">Courses</span>
+                  <p className="text-sm text-muted-foreground">
+                    Step-by-step paths (HTML, CSS, and more). Build as you go.
+                  </p>
+                </div>
+              </div>
+              <span className="mt-1 flex items-center gap-1 text-sm font-medium text-primary sm:mt-0">
+                View courses
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/blogs"
+              className="flex flex-col gap-1 py-5 transition-colors hover:text-primary sm:flex-row sm:items-center sm:justify-between sm:py-6"
+            >
+              <div className="flex items-center gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Code2 className="h-5 w-5" />
+                </span>
+                <div>
+                  <span className="font-semibold text-foreground">Blogs</span>
+                  <p className="text-sm text-muted-foreground">
+                    Articles and how-tos — deep dives and practical tips.
+                  </p>
+                </div>
+              </div>
+              <span className="mt-1 flex items-center gap-1 text-sm font-medium text-primary sm:mt-0">
+                Read blogs
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+        </ul>
       </section>
 
-      {/* Quick start card */}
-      <section className="mt-12">
-        <div className="glass-panel rounded-2xl border border-border/50 p-6 shadow-lg sm:p-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <BookOpen className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-foreground">Docs &amp; blogs</h2>
-              <p className="text-sm text-muted-foreground">
-                Use the sidebar to jump to any doc topic. Each page has an “On this page” menu for quick navigation. Blogs are full-width reads.
-              </p>
-            </div>
+      {/* Open source CTA — single card */}
+      <section className="mt-20">
+        <div className="glass-panel rounded-2xl border border-border/50 p-8 text-center shadow-lg sm:p-10">
+          <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+            Open source &amp; community
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+            We&apos;re open source. Follow us on GitHub for updates — and star the repo if it helps you out.
+          </p>
+          <div className="mt-6 flex w-full flex-nowrap items-stretch justify-center gap-2 sm:flex-wrap sm:gap-4">
+            <GithubFollowLink variant="button" className="min-w-0 flex-1 justify-center px-3 py-2 text-xs sm:flex-initial sm:px-4 sm:py-2.5 sm:text-sm" />
+            <a
+              href="https://youtube.com/@decypherlabs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+            >
+              <Youtube className="h-4 w-4 shrink-0" />
+              <span>Watch on YouTube</span>
+            </a>
           </div>
-          {(!firstFile || !firstFolder) && (
-            <p className="mt-4 rounded-xl border border-dashed border-border bg-muted/50 p-4 text-sm text-muted-foreground">
-              Add a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground">slides/</code> folder
-              with subfolders and <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground">.md</code> files
-              to see them in the sidebar.
-            </p>
-          )}
         </div>
       </section>
     </div>

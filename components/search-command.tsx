@@ -2,18 +2,22 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, FileText, BookOpen, Keyboard } from "lucide-react";
+import { Search, FileText, BookOpen, Keyboard, GraduationCap } from "lucide-react";
 import { KeyboardShortcuts } from "./keyboard-shortcuts";
 
 export type SearchItem = {
   title: string;
   href: string;
-  type: "doc" | "blog";
+  type: "doc" | "blog" | "guide";
 };
 
 type SearchCommandProps = {
   items: SearchItem[];
 };
+
+const INITIAL_LIMIT = 5;
+const SEARCH_LIMIT = 10;
+const LOAD_MORE_STEP = 10;
 
 export function SearchCommand({ items }: SearchCommandProps) {
   const router = useRouter();
@@ -21,6 +25,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT);
 
   const q = query.trim().toLowerCase();
   const filtered = q
@@ -30,12 +35,19 @@ export function SearchCommand({ items }: SearchCommandProps) {
         return searchable.includes(q);
       })
     : items;
-  const slice = filtered.slice(0, 8);
+
+  const slice = filtered.slice(0, visibleCount);
+  const hasMore = filtered.length > visibleCount;
+
+  useEffect(() => {
+    setVisibleCount(q ? SEARCH_LIMIT : INITIAL_LIMIT);
+  }, [q]);
 
   const openSearch = useCallback(() => {
     setOpen(true);
     setQuery("");
     setSelected(0);
+    setVisibleCount(INITIAL_LIMIT);
   }, []);
 
   const closeSearch = useCallback(() => {
@@ -131,7 +143,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
             ESC
           </kbd>
         </div>
-        <ul className="max-h-[60vh] overflow-y-auto py-2">
+        <ul className="max-h-[50vh] overflow-y-auto py-2">
           {slice.length === 0 ? (
             <li className="px-3 py-4 text-center text-sm text-muted-foreground">
               No results
@@ -153,18 +165,31 @@ export function SearchCommand({ items }: SearchCommandProps) {
                 >
                   {item.type === "doc" ? (
                     <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  ) : item.type === "guide" ? (
+                    <GraduationCap className="h-4 w-4 shrink-0 text-muted-foreground" />
                   ) : (
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                   )}
                   <span className="min-w-0 truncate">{item.title}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">
-                    {item.type === "blog" ? "Blog" : "Doc"}
+                    {item.type === "blog" ? "Blog" : item.type === "guide" ? "Course" : "Doc"}
                   </span>
                 </button>
               </li>
             ))
           )}
         </ul>
+        {hasMore && (
+          <div className="border-t border-border/60 px-3 py-2">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((c) => c + LOAD_MORE_STEP)}
+              className="w-full rounded-lg border border-border/60 bg-muted/30 py-2 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+            >
+              Load more ({filtered.length - visibleCount} more)
+            </button>
+          </div>
+        )}
         <div className="border-t border-border/60 px-3 py-2 text-xs text-muted-foreground">
           <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">↑</kbd>{" "}
           <kbd className="rounded border border-border/60 bg-muted/50 px-1.5 py-0.5">↓</kbd> to

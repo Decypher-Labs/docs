@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { getBlogConfig } from "./content-config";
 
-const BLOGS_DIR = path.join(process.cwd(), "blogs");
+const BLOGS_DIR = path.join(process.cwd(), "static", "blogs");
 
 export type BlogPost = {
   slug: string;
@@ -11,26 +12,33 @@ export type BlogPost = {
   excerpt?: string;
 };
 
-/** Convert filename to title (e.g. my-first-post.md -> My first post) */
+/** Convert filename to title (e.g. 01_my-first-post.md -> My first post); 01_, 02_ prefix stripped for display */
 function filenameToTitle(filename: string): string {
   const withoutExt = filename.replace(/\.md$/i, "");
-  const withSpaces = withoutExt.replace(/-/g, " ");
+  const withoutLeadingNumbers = withoutExt.replace(/^\d+_?/, "");
+  const withSpaces = withoutLeadingNumbers.replace(/-/g, " ").replace(/_/g, " ");
   return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1).toLowerCase();
 }
 
-/** List all blog posts from blogs/*.md (flat), sorted by filename desc (newest first) */
+/** List all blog posts from static/blogs/*.md (flat), ordered by 01_, 02_ filename convention */
 export function getBlogsList(): BlogPost[] {
   if (!fs.existsSync(BLOGS_DIR)) return [];
   const files = fs.readdirSync(BLOGS_DIR);
   const mdFiles = files
-    .filter((f) => f.endsWith(".md"))
-    .sort()
-    .reverse();
-  return mdFiles.map((filename) => ({
-    filename,
-    slug: filename.replace(/\.md$/i, ""),
-    title: filenameToTitle(filename),
-  }));
+    .filter((f) => f.endsWith(".md") && f !== "config.yaml")
+    .sort();
+  const configMap = getBlogConfig();
+  return mdFiles.map((filename) => {
+    const slug = filename.replace(/\.md$/i, "");
+    const defaultTitle = filenameToTitle(filename);
+    const config = configMap.get(slug);
+    return {
+      filename,
+      slug,
+      title: config?.heading ?? defaultTitle,
+      excerpt: config?.excerpt ?? config?.description,
+    };
+  });
 }
 
 /** Get raw markdown content for a blog slug */

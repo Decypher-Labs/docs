@@ -7,28 +7,33 @@ import { Sidebar, SIDEBAR_DEFAULT } from "./sidebar";
 import { SidebarResizeHandle } from "./sidebar-resize-handle";
 import { Footer } from "./footer";
 import type { SlideFolder } from "@/lib/slides";
+import { getDocPrettyUrl } from "@/lib/doc-pretty-url";
 import type { BlogPost } from "@/lib/blogs";
+import type { Course } from "@/lib/courses";
 import { useMediaQuery } from "./use-media-query";
 import { SearchCommand } from "./search-command";
 import { ThemeTransition } from "./theme-transition";
 
 const SIDEBAR_WIDTH_KEY = "docs-sidebar-width";
 
-type SearchItem = { title: string; href: string; type: "doc" | "blog" };
+type SearchItem = { title: string; href: string; type: "doc" | "blog" | "guide" };
 
 type AppShellProps = {
   tree: SlideFolder[];
   blogs: BlogPost[];
+  courses: Course[];
   children: React.ReactNode;
+  /** When true, sidebar is hidden (e.g. on 404 page) */
+  hideSidebar?: boolean;
 };
 
-function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[]): SearchItem[] {
+function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[], courses: Course[]): SearchItem[] {
   const docItems: SearchItem[] = [];
   for (const f of tree) {
     for (const file of f.files) {
       docItems.push({
         title: file.title,
-        href: `/${f.name}/${file.slug}`,
+        href: getDocPrettyUrl(f.name, file.slug),
         type: "doc",
       });
     }
@@ -38,11 +43,21 @@ function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[]): SearchItem[] 
     href: `/blogs/${b.slug}`,
     type: "blog",
   }));
-  return [...docItems, ...blogItems];
+  const guideItems: SearchItem[] = [];
+  for (const c of courses) {
+    for (const file of c.files) {
+      guideItems.push({
+        title: `${c.title}: ${file.title}`,
+        href: `/courses/${c.slug}/${file.slug}`,
+        type: "guide",
+      });
+    }
+  }
+  return [...docItems, ...blogItems, ...guideItems];
 }
 
-export function AppShell({ tree, blogs, children }: AppShellProps) {
-  const searchItems = buildSearchItems(tree, blogs);
+export function AppShell({ tree, blogs, courses, children, hideSidebar = false }: AppShellProps) {
+  const searchItems = buildSearchItems(tree, blogs, courses);
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -79,10 +94,9 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname]);
 
-  const showSidebar = pathname !== "/" && !pathname.startsWith("/blogs");
-  // On mobile/tablet, sidebar is always available via hamburger menu
-  // On desktop, sidebar only shows on doc pages
-  const shouldRenderSidebar = showSidebar || isMobile;
+  // Show sidebar on docs, blogs, and courses (all views). Hidden when hideSidebar (e.g. 404).
+  const showSidebar = !hideSidebar && pathname !== "/";
+  const shouldRenderSidebar = !hideSidebar && (showSidebar || isMobile);
   const sidebarVisible = isMobile ? mobileOpen : !collapsed;
 
   const closeSidebar = () => {
@@ -126,6 +140,8 @@ export function AppShell({ tree, blogs, children }: AppShellProps) {
           >
             <Sidebar
               tree={tree}
+              blogs={blogs}
+              courses={courses}
               collapsed={!sidebarVisible}
               onToggle={toggleSidebar}
               isMobile={isMobile}
