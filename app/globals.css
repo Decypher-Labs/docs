@@ -205,19 +205,39 @@ aside li {
   display: inline-block;
 }
 
-/* Subtle background decoration - light: green accent bottom-left */
+/* Home page: subtle infinite icon animations */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.animate-float-slow {
+  animation: float-slow 3s ease-in-out infinite;
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2.5s ease-in-out infinite;
+}
+
+/* Subtle background decoration - light: green accent bottom-left + wide short pink flare */
 .bg-mesh {
   background-image:
     radial-gradient(at 40% 20%, var(--accent-subtle) 0px, transparent 50%),
     radial-gradient(at 80% 0%, var(--accent-muted) 0px, transparent 40%),
     radial-gradient(at 0% 50%, var(--muted) 0px, transparent 45%),
-    radial-gradient(at 0% 100%, rgba(5, 150, 105, 0.06) 0px, transparent 40%);
+    radial-gradient(at 0% 100%, rgba(5, 150, 105, 0.06) 0px, transparent 40%),
+    radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 20%);
   background-attachment: fixed;
 }
 
 .dark .bg-mesh {
   background-image:
-    radial-gradient(at 40% 20%, rgba(6, 78, 59, 0.3) 0px, transparent 50%),
+    radial-gradient(at 40% 20%, rgba(6, 78, 59, 0.3) 0px, transparent 60%),
     radial-gradient(at 80% 0%, rgba(52, 211, 153, 0.08) 0px, transparent 40%),
     radial-gradient(at 0% 50%, rgba(30, 41, 59, 0.5) 0px, transparent 45%),
     radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 45%);

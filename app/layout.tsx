@@ -16,8 +16,9 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "DecypherLabs Docs",
-  description: "Documentation and slides",
+  title: "DecypherLabs – Learn DevOps & Development | Tutorials, Docs & Courses",
+  description:
+    "Learn DevOps and software development by doing. Free tutorials, documentation, and courses on Docker, Kubernetes, HTML, CSS and more.",
   icons: {
     icon: "/logo.png",
   },
