@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+.pnpm-store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+.next
+out
+dist
+build
+
+# Git and IDE
+.git
+.gitignore
+.cursor
+.vscode
+*.swp
+*.swo
+
+# Env and misc
+.env
+.env.*
+!.env.example
+*.md
+!README.md
+Dockerfile
+.dockerignore

@@ -47,7 +47,7 @@ function readConfigYaml<T>(dir: string, filename: string): T | null {
 const STATIC_DIR = path.join(process.cwd(), "static");
 
 /** Get course config: static/courses/config.yaml with optional "courses" array or root array */
-export function getCourseConfig(): Map<string, { heading?: string; description?: string }> {
+export function getCourseConfig(): Map<string, { heading?: string; description?: string; keywords?: string[] }> {
   const dir = path.join(STATIC_DIR, "courses");
   const data = readConfigYaml<{ courses?: CourseConfigItem[] } | CourseConfigItem[]>(dir, "config.yaml");
   if (!data) return new Map();
@@ -69,7 +69,7 @@ export function getCourseConfig(): Map<string, { heading?: string; description?:
 }
 
 /** Get blog config: static/blogs/config.yaml with optional "blogs" array or root array */
-export function getBlogConfig(): Map<string, { heading?: string; description?: string; excerpt?: string }> {
+export function getBlogConfig(): Map<string, { heading?: string; description?: string; excerpt?: string; keywords?: string[] }> {
   const dir = path.join(STATIC_DIR, "blogs");
   const data = readConfigYaml<{ blogs?: BlogConfigItem[] } | BlogConfigItem[]>(dir, "config.yaml");
   if (!data) return new Map();
