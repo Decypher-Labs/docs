@@ -1,7 +1,8 @@
-# Optional overrides for doc folders. Slug = folder name (e.g. 01_docker).
-# If omitted, folder title is derived from name (01_docker -> Docker).
-docs:
-  - slug: "01_docker"
-    heading: Docker
-    description: Container basics, Dockerfile, and commands. Copy, run, learn.
-    keywords: [Docker]
+# Override heading, description, and keywords for doc sections.
+# Slug = folder name under static/docs/ (e.g. 01_docker).
+# Add folders under static/docs/ with .md files; list them here to customize.
+# docs:
+#   - slug: 01_docker
+#     heading: Docker
+#     description: Container basics and Dockerfile guides.
+#     keywords: [docker, containers, devops]

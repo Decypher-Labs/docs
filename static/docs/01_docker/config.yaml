@@ -1,6 +1,0 @@
-# Optional overrides for .md file titles in this folder. Slug = filename without .md
-files:
-  - slug: "01_introduction_to_docker"
-    heading: Introduction to Docker
-  - slug: "02_dockerfile_basics"
-    heading: Dockerfile Basics

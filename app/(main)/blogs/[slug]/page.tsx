@@ -6,6 +6,7 @@ import {
   getAllBlogSlugs,
   getBlogModificationTime,
 } from "@/lib/blogs";
+import { parseConfigDate } from "@/lib/content-config";
 import { getHeadings, stripFirstMatchingHeading } from "@/lib/markdown-utils";
 import { calculateReadingTime, formatReadingTime } from "@/lib/reading-time";
 import { MarkdownContent } from "@/components/markdown-content";
@@ -47,7 +48,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const content = stripFirstMatchingHeading(rawContent, title);
   const headings = getHeadings(content);
   const readingTime = calculateReadingTime(content);
-  const lastUpdated = getBlogModificationTime(slug);
+  const lastUpdated = parseConfigDate(post?.updated) ?? getBlogModificationTime(slug);
 
   const pageUrl = `/blogs/${slug}`;
 

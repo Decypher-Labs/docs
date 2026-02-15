@@ -92,6 +92,17 @@ export function AppShell({ tree, blogs, courses, children, hideSidebar = false }
     setCollapsed(pathname === "/");
   }, [pathname]);
 
+  // Lock body scroll when mobile sidebar is open so background content doesn't scroll
+  useEffect(() => {
+    if (isMobile && mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isMobile, mobileOpen]);
+
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });

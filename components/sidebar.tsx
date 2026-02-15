@@ -173,8 +173,7 @@ export function Sidebar({
         {pathname !== "/" && section === "docs" && (
           tree.length === 0 ? (
             <p className="rounded-lg border border-dashed border-border/60 bg-muted/30 px-3 py-4 text-center text-sm text-muted-foreground">
-              Add folders and <code className="rounded bg-muted px-1">.md</code> files in{" "}
-              <code className="rounded bg-muted px-1">static/docs/</code>
+              Will be added soon.
             </p>
           ) : (
             <ul className="space-y-1">

@@ -22,7 +22,7 @@ export default async function CoursesPage() {
       </header>
       {courses.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-12 text-center text-muted-foreground">
-          <p>No courses yet. Add folders under <code className="rounded bg-muted px-1">static/courses/</code> (e.g. <code className="rounded bg-muted px-1">01_html</code>) with <code className="rounded bg-muted px-1">.md</code> files.</p>
+          <p className="text-sm text-muted-foreground">Admin will add courses here soon. Thanks for your patience.</p>
         </div>
       ) : (
         <CoursesList courses={courses} />

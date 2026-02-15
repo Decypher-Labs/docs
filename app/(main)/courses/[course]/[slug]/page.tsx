@@ -8,6 +8,7 @@ import {
   getGuideModificationTime,
   resolveGuideUrlSlug,
 } from "@/lib/courses";
+import { getCourseFolderConfig, parseConfigDate } from "@/lib/content-config";
 import { getHeadings, stripFirstMatchingHeading } from "@/lib/markdown-utils";
 import { calculateReadingTime, formatReadingTime } from "@/lib/reading-time";
 import { MarkdownContent } from "@/components/markdown-content";
@@ -52,7 +53,8 @@ export default async function GuidePage({ params }: PageProps) {
   const content = stripFirstMatchingHeading(rawContent, pageTitle);
   const headings = getHeadings(content);
   const readingTime = calculateReadingTime(content);
-  const lastUpdated = getGuideModificationTime(courseSlug, fileSlug);
+  const fileEntry = getCourseFolderConfig(courseMeta.folderName).find((e) => e.slug === urlSlug);
+  const lastUpdated = parseConfigDate(fileEntry?.updated) ?? getGuideModificationTime(courseSlug, fileSlug);
 
   const { prev, next } = getGuidePrevNext(courseSlug, urlSlug);
   const prevDoc = prev ? { folder: prev.course, slug: prev.slug, title: prev.title } : null;

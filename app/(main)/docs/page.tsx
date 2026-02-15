@@ -22,8 +22,7 @@ export default async function DocsPage() {
       </header>
       {tree.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-12 text-center text-muted-foreground">
-          Add folders under <code className="rounded bg-muted px-1">static/docs/</code> with{" "}
-          <code className="rounded bg-muted px-1">.md</code> files to see them here.
+          <p className="text-sm text-muted-foreground">Admin will add docs here soon. Thanks for your patience.</p>
         </div>
       ) : (
         <DocsList folders={tree} />

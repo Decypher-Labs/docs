@@ -12,6 +12,8 @@ export type BlogPost = {
   excerpt?: string;
   /** Keywords for filtering e.g. ["devops", "Docker"] */
   keywords?: string[];
+  /** ISO date from config.yaml for "Updated" display; overrides file mtime when set */
+  updated?: string;
 };
 
 /** Convert filename to title (e.g. 01_my-first-post.md -> My first post); 01_, 02_ prefix stripped for display */
@@ -40,6 +42,7 @@ export function getBlogsList(): BlogPost[] {
       title: config?.heading ?? defaultTitle,
       excerpt: config?.excerpt ?? config?.description,
       keywords: config?.keywords,
+      updated: config?.updated,
     };
   });
 }

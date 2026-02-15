@@ -27,7 +27,7 @@ export function DocNav({ prev, next, basePath, buildDocHref }: DocNavProps) {
       className="mt-8 flex flex-col gap-3 border-t border-border/60 pt-6 sm:flex-row sm:justify-between"
       aria-label="Document navigation"
     >
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 sm:min-w-0">
         {prev ? (
           <Link
             href={buildHref(prev.folder, prev.slug, basePath, buildDocHref)}
@@ -38,14 +38,14 @@ export function DocNav({ prev, next, basePath, buildDocHref }: DocNavProps) {
               <span className="block text-xs font-medium uppercase tracking-wider text-muted-foreground/80">
                 Previous
               </span>
-              <span className="block truncate font-medium">{prev.title}</span>
+              <span className="block font-medium sm:truncate">{prev.title}</span>
             </span>
           </Link>
         ) : (
           <span />
         )}
       </div>
-      <div className="min-w-0 flex-1 text-right">
+      <div className="min-w-0 flex-1 text-right sm:min-w-0">
         {next ? (
           <Link
             href={buildHref(next.folder, next.slug, basePath, buildDocHref)}
@@ -55,7 +55,7 @@ export function DocNav({ prev, next, basePath, buildDocHref }: DocNavProps) {
               <span className="block text-xs font-medium uppercase tracking-wider text-muted-foreground/80">
                 Next
               </span>
-              <span className="block truncate font-medium">{next.title}</span>
+              <span className="block font-medium sm:truncate">{next.title}</span>
             </span>
             <ChevronRight className="h-4 w-4 shrink-0" />
           </Link>

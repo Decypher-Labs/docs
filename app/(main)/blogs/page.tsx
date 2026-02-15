@@ -16,8 +16,7 @@ export default async function BlogsPage() {
       </header>
       {posts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-12 text-center text-muted-foreground">
-          Add <code className="rounded bg-muted px-1">.md</code> files in{" "}
-          <code className="rounded bg-muted px-1">static/blogs/</code> to see them here.
+          <p className="text-sm text-muted-foreground">Admin will add blogs here soon. Thanks for your patience.</p>
         </div>
       ) : (
         <BlogsList posts={posts} />

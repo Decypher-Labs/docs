@@ -9,6 +9,7 @@ import {
   resolveDocPrettyUrl,
   getDocPrettyUrl,
 } from "@/lib/slides";
+import { getDocsFolderConfig, parseConfigDate } from "@/lib/content-config";
 import { getHeadings, stripFirstMatchingHeading } from "@/lib/markdown-utils";
 import { calculateReadingTime, formatReadingTime } from "@/lib/reading-time";
 import { MarkdownContent } from "@/components/markdown-content";
@@ -62,7 +63,8 @@ export default async function DocPage({ params }: PageProps) {
   const content = stripFirstMatchingHeading(rawContent, pageTitle);
   const headings = getHeadings(content);
   const readingTime = calculateReadingTime(content);
-  const lastUpdated = getFileModificationTime(folder, slug);
+  const docConfig = getDocsFolderConfig(folder).get(slug);
+  const lastUpdated = parseConfigDate(docConfig?.updated) ?? getFileModificationTime(folder, slug);
 
   const githubEditBase = "https://github.com/Decypher-Labs/docs/edit/main";
   const editHref = fileMeta?.filename
