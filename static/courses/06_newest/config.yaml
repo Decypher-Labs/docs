@@ -1,0 +1,5 @@
+# file = filename without .md, slug = URL path, heading = display title
+files:
+  - file: "01_getting_started"
+    slug: "getting-started"
+    heading: Getting Started

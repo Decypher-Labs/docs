@@ -4,3 +4,4 @@ blogs:
     heading: Getting Started
     description: Welcome to the DecypherLabs blog.
     excerpt: Welcome to the DecypherLabs blog. Articles on DevOps, development, and more.
+    keywords: [devops, getting-started]

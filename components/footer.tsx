@@ -48,7 +48,7 @@ export function Footer() {
         </nav>
       </div>
       <div className="border-t border-border/60 px-4 py-4 text-center text-xs text-muted-foreground sm:px-6 lg:px-8">
-        © {new Date().getFullYear()} DecypherLabs. Docs &amp; slides for the channel.
+        © {new Date().getFullYear()} DecypherLabs. Docs &amp; All Rights Reserved.
       </div>
     </footer>
   );

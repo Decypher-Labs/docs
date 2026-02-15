@@ -16,7 +16,7 @@ import { ThemeTransition } from "./theme-transition";
 
 const SIDEBAR_WIDTH_KEY = "docs-sidebar-width";
 
-type SearchItem = { title: string; href: string; type: "doc" | "blog" | "guide" };
+type SearchItem = { title: string; href: string; type: "doc" | "blog" | "guide"; keywords?: string[] };
 
 type AppShellProps = {
   tree: SlideFolder[];
@@ -35,6 +35,7 @@ function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[], courses: Cours
         title: file.title,
         href: getDocPrettyUrl(f.name, file.slug),
         type: "doc",
+        keywords: f.keywords,
       });
     }
   }
@@ -42,6 +43,7 @@ function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[], courses: Cours
     title: b.title,
     href: `/blogs/${b.slug}`,
     type: "blog",
+    keywords: b.keywords,
   }));
   const guideItems: SearchItem[] = [];
   for (const c of courses) {
@@ -50,6 +52,7 @@ function buildSearchItems(tree: SlideFolder[], blogs: BlogPost[], courses: Cours
         title: `${c.title}: ${file.title}`,
         href: `/courses/${c.slug}/${file.slug}`,
         type: "guide",
+        keywords: c.keywords,
       });
     }
   }

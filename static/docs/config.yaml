@@ -3,3 +3,5 @@
 docs:
   - slug: "01_docker"
     heading: Docker
+    description: Container basics, Dockerfile, and commands. Copy, run, learn.
+    keywords: [Docker]

@@ -102,6 +102,18 @@ export default async function GuidePage({ params }: PageProps) {
                     </div>
                   )}
                 </div>
+                {courseMeta.keywords && courseMeta.keywords.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {courseMeta.keywords.map((kw) => (
+                      <span
+                        key={kw}
+                        className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"
+                      >
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </header>
               <MarkdownContent content={content} />
               <ReactionButtons />

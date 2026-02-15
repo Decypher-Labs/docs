@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 import { Moon, Sun, Youtube, BookOpen, Menu, X, Search, FileText, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SlideFolder } from "@/lib/slides";
-import { getDocPrettyUrl } from "@/lib/doc-pretty-url";
 
 type NavbarProps = {
   tree: SlideFolder[];
@@ -35,10 +34,6 @@ export function Navbar({
     }
   }, [theme, mounted]);
 
-  const firstDoc = tree[0]?.files[0]
-    ? getDocPrettyUrl(tree[0].name, tree[0].files[0].slug)
-    : null;
-
   return (
     <header className="navbar-glass sticky top-0 z-50 flex h-14 items-center justify-between gap-4 px-4 shadow-sm sm:px-6">
       <div className="flex min-w-0 flex-1 items-center gap-6">
@@ -58,15 +53,13 @@ export function Navbar({
           >
             Home
           </Link>
-          {firstDoc && (
-            <Link
-              href={firstDoc}
-              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
-            >
-              <BookOpen className="h-4 w-4" />
-              Docs
-            </Link>
-          )}
+          <Link
+            href="/docs"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+          >
+            <BookOpen className="h-4 w-4" />
+            Docs
+          </Link>
           <Link
             href="/courses"
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
@@ -96,7 +89,7 @@ export function Navbar({
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent("open-search"))}
-          className="hidden md:inline-flex h-9 items-center gap-2 rounded-xl border border-border/50 bg-card/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-ring"
+          className="shine-on-hover hidden md:inline-flex h-9 items-center gap-2 rounded-xl border border-border/50 bg-card/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-ring"
           aria-label="Search (⌘K)"
           title="Search (⌘K)"
         >
@@ -110,7 +103,7 @@ export function Navbar({
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent("open-search"))}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
+          className="shine-on-hover inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
           aria-label="Search (⌘K)"
           title="Search (⌘K)"
         >
@@ -120,7 +113,7 @@ export function Navbar({
           <button
             type="button"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-white/50 text-muted-foreground overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-white/70 hover:text-foreground dark:bg-white/10 dark:hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-ring group"
+            className="shine-on-hover relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-white/50 text-muted-foreground overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-white/70 hover:text-foreground dark:bg-white/10 dark:hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-ring group"
             aria-label="Toggle theme"
           >
             <span key={iconKey} className="relative z-10 transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
@@ -137,7 +130,7 @@ export function Navbar({
           <button
             type="button"
             onClick={onMenuClick}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring lg:hidden"
+            className="shine-on-hover flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring lg:hidden"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? (

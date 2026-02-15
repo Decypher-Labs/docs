@@ -9,7 +9,7 @@ type Props = {
 
 /** "Follow on GitHub" link for use in footer, hero, sidebars. Uses GitHub org URL. */
 export function GithubFollowLink({ className = "", variant = "default" }: Props) {
-  const base = "inline-flex items-center gap-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
+  const base = "shine-on-hover inline-flex items-center gap-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
   const variants = {
     default:
       "rounded-xl border border-border bg-card px-4 py-2.5 text-foreground shadow-sm hover:bg-muted/60 hover:border-primary/50",

@@ -6,6 +6,8 @@ export type CourseConfigItem = {
   slug: string;
   heading?: string;
   description?: string;
+  /** e.g. ["web-development", "HTML", "devops"] */
+  keywords?: string[];
 };
 
 export type BlogConfigItem = {
@@ -13,12 +15,14 @@ export type BlogConfigItem = {
   heading?: string;
   description?: string;
   excerpt?: string;
+  keywords?: string[];
 };
 
 export type DocConfigItem = {
   slug: string;
   heading?: string;
   description?: string;
+  keywords?: string[];
 };
 
 /** Per-dir doc file override: slug = md filename without .md */
@@ -48,12 +52,16 @@ export function getCourseConfig(): Map<string, { heading?: string; description?:
   const data = readConfigYaml<{ courses?: CourseConfigItem[] } | CourseConfigItem[]>(dir, "config.yaml");
   if (!data) return new Map();
   const list = Array.isArray(data) ? data : data.courses ?? [];
-  const map = new Map<string, { heading?: string; description?: string }>();
+  const map = new Map<string, { heading?: string; description?: string; keywords?: string[] }>();
   for (const item of list) {
     if (item && typeof item === "object" && "slug" in item && typeof item.slug === "string") {
+      const keywords = Array.isArray((item as CourseConfigItem).keywords)
+        ? ((item as CourseConfigItem).keywords as unknown[]).filter((k): k is string => typeof k === "string")
+        : undefined;
       map.set(item.slug, {
         heading: typeof item.heading === "string" ? item.heading : undefined,
         description: typeof item.description === "string" ? item.description : undefined,
+        keywords: keywords?.length ? keywords : undefined,
       });
     }
   }
@@ -66,31 +74,39 @@ export function getBlogConfig(): Map<string, { heading?: string; description?: s
   const data = readConfigYaml<{ blogs?: BlogConfigItem[] } | BlogConfigItem[]>(dir, "config.yaml");
   if (!data) return new Map();
   const list = Array.isArray(data) ? data : data.blogs ?? [];
-  const map = new Map<string, { heading?: string; description?: string; excerpt?: string }>();
+  const map = new Map<string, { heading?: string; description?: string; excerpt?: string; keywords?: string[] }>();
   for (const item of list) {
     if (item && typeof item === "object" && "slug" in item && typeof item.slug === "string") {
+      const keywords = Array.isArray((item as BlogConfigItem).keywords)
+        ? ((item as BlogConfigItem).keywords as unknown[]).filter((k): k is string => typeof k === "string")
+        : undefined;
       map.set(item.slug, {
         heading: typeof item.heading === "string" ? item.heading : undefined,
         description: typeof item.description === "string" ? item.description : undefined,
         excerpt: typeof item.excerpt === "string" ? item.excerpt : undefined,
+        keywords: keywords?.length ? keywords : undefined,
       });
     }
   }
   return map;
 }
 
-/** Get docs config: static/docs/config.yaml. Slug = folder name (e.g. 01_docker). Maps dirs to heading/description. */
-export function getDocsConfig(): Map<string, { heading?: string; description?: string }> {
+/** Get docs config: static/docs/config.yaml. Slug = folder name (e.g. 01_docker). Maps dirs to heading/description/keywords. */
+export function getDocsConfig(): Map<string, { heading?: string; description?: string; keywords?: string[] }> {
   const dir = path.join(STATIC_DIR, "docs");
   const data = readConfigYaml<{ docs?: DocConfigItem[] } | DocConfigItem[]>(dir, "config.yaml");
   if (!data) return new Map();
   const list = Array.isArray(data) ? data : data.docs ?? [];
-  const map = new Map<string, { heading?: string; description?: string }>();
+  const map = new Map<string, { heading?: string; description?: string; keywords?: string[] }>();
   for (const item of list) {
     if (item && typeof item === "object" && "slug" in item && typeof item.slug === "string") {
+      const keywords = Array.isArray((item as DocConfigItem).keywords)
+        ? ((item as DocConfigItem).keywords as unknown[]).filter((k): k is string => typeof k === "string")
+        : undefined;
       map.set(item.slug, {
         heading: typeof item.heading === "string" ? item.heading : undefined,
         description: typeof item.description === "string" ? item.description : undefined,
+        keywords: keywords?.length ? keywords : undefined,
       });
     }
   }

@@ -24,9 +24,10 @@ export default function HomePage() {
     <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6 md:py-8 lg:px-8">
       {/* Hero: centered in viewport (x and y), full height on mobile for true center */}
       <section className="flex min-h-[calc(70vh-3.5rem)] flex-col items-center justify-center text-center sm:min-h-[calc(60vh-3.5rem)]">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary sm:text-sm">
-          <Youtube className="h-4 w-4 animate-soft-pulse" />
+        <div className="hero-pill-wrap relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary sm:text-sm">
+          <Youtube className="h-4 w-4 shrink-0 animate-soft-pulse" />
           DevOps &amp; Development — learn by doing
+          <span className="hero-pill-shine" aria-hidden />
         </div>
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
           Welcome to{" "}
@@ -44,7 +45,7 @@ export default function HomePage() {
             href="https://youtube.com/@decypherlabs"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+            className="shine-on-hover inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
           >
             <Youtube className="h-4 w-4 shrink-0 animate-soft-pulse" />
             <span>Watch on YouTube</span>
@@ -229,7 +230,7 @@ export default function HomePage() {
               href="https://youtube.com/@decypherlabs"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:w-auto sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+              className="shine-on-hover inline-flex w-full items-center justify-center gap-2 rounded-xl border border-transparent bg-white px-3 py-2 text-xs font-medium text-slate-900 shadow-sm transition-all hover:bg-gray-100 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-100 sm:w-auto sm:flex-initial sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
             >
               <Youtube className="h-4 w-4 shrink-0 animate-soft-pulse" />
               <span>Watch on YouTube</span>

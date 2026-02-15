@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Search, FileText, BookOpen, Keyboard, GraduationCap } from "lucide-react";
+import { Search, FileText, BookOpen, Keyboard, GraduationCap, ChevronDown } from "lucide-react";
 import { KeyboardShortcuts } from "./keyboard-shortcuts";
 
 export type SearchItem = {
   title: string;
   href: string;
   type: "doc" | "blog" | "guide";
+  keywords?: string[];
 };
 
 type SearchCommandProps = {
@@ -26,28 +27,42 @@ export function SearchCommand({ items }: SearchCommandProps) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT);
+  const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
 
   const q = query.trim().toLowerCase();
-  const filtered = q
+  const keywordFilter = selectedKeyword;
+  const byQuery = q
     ? items.filter((item) => {
         const slug = item.type === "blog" ? item.href.replace(/^\/blogs\//, "") : "";
-        const searchable = `${item.title} ${item.type} ${slug}`.toLowerCase();
+        const keywordsStr = (item.keywords ?? []).join(" ");
+        const searchable = `${item.title} ${item.type} ${slug} ${keywordsStr}`.toLowerCase();
         return searchable.includes(q);
       })
     : items;
+  const filtered = keywordFilter
+    ? byQuery.filter((item) =>
+        item.keywords?.some((k) => k.toLowerCase() === keywordFilter.toLowerCase())
+      )
+    : byQuery;
 
   const slice = filtered.slice(0, visibleCount);
   const hasMore = filtered.length > visibleCount;
+  const allKeywords = useMemo(() => {
+    const set = new Set<string>();
+    items.forEach((i) => (i.keywords ?? []).forEach((k) => k.trim() && set.add(k.trim())));
+    return Array.from(set).sort();
+  }, [items]);
 
   useEffect(() => {
-    setVisibleCount(q ? SEARCH_LIMIT : INITIAL_LIMIT);
-  }, [q]);
+    setVisibleCount(q || selectedKeyword ? SEARCH_LIMIT : INITIAL_LIMIT);
+  }, [q, selectedKeyword]);
 
   const openSearch = useCallback(() => {
     setOpen(true);
     setQuery("");
     setSelected(0);
     setVisibleCount(INITIAL_LIMIT);
+    setSelectedKeyword(null);
   }, []);
 
   const closeSearch = useCallback(() => {
@@ -143,6 +158,37 @@ export function SearchCommand({ items }: SearchCommandProps) {
             ESC
           </kbd>
         </div>
+        {allKeywords.length > 0 && (
+          <div className="filter-tabs-scroll border-b border-border/60 px-3 py-2 pb-2">
+            <div className="flex min-w-0 flex-nowrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setSelectedKeyword(null)}
+                className={`shine-on-hover shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                  selectedKeyword === null
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                All
+              </button>
+              {allKeywords.map((kw) => (
+                <button
+                  key={kw}
+                  type="button"
+                  onClick={() => setSelectedKeyword(kw)}
+                  className={`shine-on-hover shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                    selectedKeyword === kw
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  {kw}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <ul className="max-h-[50vh] overflow-y-auto py-2">
           {slice.length === 0 ? (
             <li className="px-3 py-4 text-center text-sm text-muted-foreground">
@@ -184,8 +230,9 @@ export function SearchCommand({ items }: SearchCommandProps) {
             <button
               type="button"
               onClick={() => setVisibleCount((c) => c + LOAD_MORE_STEP)}
-              className="w-full rounded-lg border border-border/60 bg-muted/30 py-2 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+              className="shine-on-hover flex w-full items-center justify-center gap-2 rounded-lg border border-border/60 bg-muted/30 py-2.5 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
             >
+              <ChevronDown className="h-4 w-4" />
               Load more ({filtered.length - visibleCount} more)
             </button>
           </div>

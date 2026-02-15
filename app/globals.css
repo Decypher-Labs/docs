@@ -18,6 +18,8 @@
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(203, 213, 225, 0.8);
   --glass-blur: 20px;
+  --shine-color: rgba(255, 255, 255, 0.12);
+  --shine-color-strong: rgba(255, 255, 255, 0.28);
 }
 
 /* Dark: deep slate + emerald accent */
@@ -224,6 +226,68 @@ aside li {
   animation: soft-pulse 2.5s ease-in-out infinite;
 }
 
+/* Hero pill: diagonal shine from left bottom to right top (seamless loop) */
+.hero-pill-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  /* Two identical stripes so loop is seamless */
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 35%,
+    var(--shine-color) 42%,
+    var(--shine-color-strong) 50%,
+    var(--shine-color) 58%,
+    transparent 75%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: hero-pill-shine 5s linear infinite;
+}
+@keyframes hero-pill-shine {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Shine on hover: add class .shine-on-hover to any button/link */
+.shine-on-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shine-on-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 35%,
+    var(--shine-color) 42%,
+    var(--shine-color-strong) 50%,
+    var(--shine-color) 58%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: hero-pill-shine 2s linear infinite;
+}
+.shine-on-hover:hover::after {
+  opacity: 1;
+}
+.shine-on-hover > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Subtle background decoration - light: green accent bottom-left + wide short pink flare */
 .bg-mesh {
   background-image:
@@ -271,7 +335,7 @@ aside li {
 /* Navbar: stronger glass so content behind is blurred */
 .navbar-glass {
   background: var(--glass);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(15px);
   --webkit-backdrop-filter: 0px 0px 0px 0px var(--glass-border);
   border-bottom: 1px solid var(--glass-border);
 }
@@ -527,4 +591,29 @@ aside li {
 
 .prose em {
   color: var(--muted-foreground);
+}
+
+/* Horizontal filter tabs: single line, scrollable only inside this div */
+.filter-tabs-scroll {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.filter-tabs-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.filter-tabs-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+.filter-tabs-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.filter-tabs-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }

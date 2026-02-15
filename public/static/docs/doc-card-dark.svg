@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220" fill="none">
+  <defs>
+    <linearGradient id="doc-bg-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="doc-accent-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:0.25" />
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:0.15" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="220" rx="12" fill="url(#doc-bg-dark)" />
+  <rect x="0" y="0" width="400" height="220" rx="12" fill="url(#doc-accent-dark)" />
+  <!-- Open book: two pages -->
+  <rect x="150" y="75" width="45" height="70" rx="6" fill="#334155" opacity="0.85" />
+  <rect x="205" y="75" width="45" height="70" rx="6" fill="#334155" opacity="0.85" />
+  <path d="M160 90 L190 90 M160 100 L185 100 M160 110 L192 110" stroke="#64748b" stroke-width="2" stroke-linecap="round" />
+  <path d="M215 90 L245 90 M215 100 L240 100 M215 110 L247 110" stroke="#64748b" stroke-width="2" stroke-linecap="round" />
+</svg>

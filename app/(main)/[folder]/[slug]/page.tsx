@@ -89,7 +89,7 @@ export default async function DocPage({ params }: PageProps) {
                 <div className="hidden md:block">
                   <Breadcrumb
                     items={[
-                      { label: "Docs", href: firstDoc ?? "/" },
+                      { label: "Docs", href: "/docs" },
                       {
                         label: folderMeta?.title ?? folder,
                         href:
@@ -122,6 +122,18 @@ export default async function DocPage({ params }: PageProps) {
                     </div>
                   )}
                 </div>
+                {folderMeta?.keywords && folderMeta.keywords.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {folderMeta.keywords.map((kw) => (
+                      <span
+                        key={kw}
+                        className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"
+                      >
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </header>
               <MarkdownContent content={content} />
               <ReactionButtons />

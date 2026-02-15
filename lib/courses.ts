@@ -22,6 +22,8 @@ export type Course = {
   title: string;
   /** Short description for course card */
   description: string;
+  /** Keywords for filtering e.g. ["web-development", "HTML"] */
+  keywords?: string[];
   files: CourseFile[];
 };
 
@@ -96,6 +98,7 @@ export function getCoursesTree(): Course[] {
         slug,
         title: config?.heading ?? title,
         description: config?.description ?? description,
+        keywords: config?.keywords,
         files: mdFiles,
       });
     }

@@ -48,9 +48,6 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const section = getSidebarSection(pathname);
-  const firstDoc = tree[0]?.files[0]
-    ? getDocPrettyUrl(tree[0].name, tree[0].files[0].slug)
-    : null;
 
   const content = (
     <>
@@ -98,13 +95,12 @@ export function Sidebar({
                 <span>Home</span>
               </Link>
             </li>
-            {firstDoc && (
-              <li>
+            <li>
                 <Link
-                  href={firstDoc}
+                  href="/docs"
                   onClick={onClose}
                   className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
-                    pathname.startsWith(`/${folderNameToPrettySlug(tree[0].name)}`)
+                    pathname === "/docs"
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   }`}
@@ -113,7 +109,6 @@ export function Sidebar({
                   <span>Docs</span>
                 </Link>
               </li>
-            )}
             <li>
               <Link
                 href="/courses"
@@ -277,10 +272,10 @@ export function Sidebar({
             See also
           </span>
           <ul className="space-y-0.5">
-            {section !== "docs" && firstDoc && (
+            {section !== "docs" && (
               <li>
                 <Link
-                  href={firstDoc}
+                  href="/docs"
                   onClick={isMobile ? onClose : undefined}
                   className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
                 >

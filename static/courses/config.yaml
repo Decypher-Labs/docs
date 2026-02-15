@@ -2,8 +2,15 @@
 # To override titles of .md files inside a course, add static/courses/01_html/config.yaml with a "files" array (slug = filename without .md).
 courses:
   - slug: html
-    heading: HTML
+    heading: HTML - The Ultimate Web Markup Language
     description: Learn HTML basics for the web.
+    keywords: [web-development, HTML]
   - slug: css
     heading: CSS
     description: Style your pages with CSS.
+    keywords: [web-development, CSS]
+  - slug: something
+    heading: Something
+    description: Learn something.
+    keywords: [devops]
+  

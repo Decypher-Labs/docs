@@ -20,6 +20,10 @@ export type SlideFile = {
 export type SlideFolder = {
   name: string;
   title: string;
+  /** Short description for doc section cards */
+  description?: string;
+  /** Keywords for filtering e.g. ["devops", "Docker"] */
+  keywords?: string[];
   files: SlideFile[];
 };
 
@@ -89,6 +93,8 @@ export function getSlidesTree(): SlideFolder[] {
       folders.push({
         name: entry.name,
         title: folderConfig?.heading ?? defaultFolderTitle,
+        description: folderConfig?.description,
+        keywords: folderConfig?.keywords,
         files: filesWithTitles,
       });
     }

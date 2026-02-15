@@ -10,6 +10,8 @@ export type BlogPost = {
   filename: string;
   /** First paragraph or excerpt for cards; optional */
   excerpt?: string;
+  /** Keywords for filtering e.g. ["devops", "Docker"] */
+  keywords?: string[];
 };
 
 /** Convert filename to title (e.g. 01_my-first-post.md -> My first post); 01_, 02_ prefix stripped for display */
@@ -37,6 +39,7 @@ export function getBlogsList(): BlogPost[] {
       slug,
       title: config?.heading ?? defaultTitle,
       excerpt: config?.excerpt ?? config?.description,
+      keywords: config?.keywords,
     };
   });
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Syne } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -39,6 +40,7 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>
