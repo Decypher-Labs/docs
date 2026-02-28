@@ -1,0 +1,24 @@
+# Linux section — file order and optional overrides
+# Slug = filename without .md
+files:
+  - slug: 00_introduction
+    heading: Introduction to Linux
+    updated: "2026-02-28"
+  - slug: 01_setup
+    heading: Installation & Getting Started
+    updated: "2026-02-28"
+  - slug: 02_processes
+    heading: Process Management
+    updated: "2026-02-28"
+  - slug: 03_permissions
+    heading: Permissions & Ownership
+    updated: "2026-02-28"
+  - slug: 04_find_search_sort
+    heading: Finding, Searching & Sorting
+    updated: "2026-02-28"
+  - slug: 05_env_system
+    heading: Environment & System Info
+    updated: "2026-02-28"
+  - slug: 06_bonus
+    heading: Bonus & Advanced
+    updated: "2026-02-28"

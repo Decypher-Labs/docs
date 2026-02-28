@@ -362,6 +362,11 @@ aside li {
   color: var(--foreground);
   font-size: 1rem;
   line-height: 1.75;
+  word-spacing: 0.04rem;
+}
+.prose pre,
+.prose code {
+  word-spacing: 0.01em;
 }
 
 .prose h1 {
@@ -375,7 +380,7 @@ aside li {
 }
 
 .prose h2 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
@@ -449,6 +454,127 @@ aside li {
   font-style: italic;
   background: var(--accent-subtle);
   border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* Callouts: use in MD as blockquote with first line "Note:", "Info:", "Warning:", "Error:" */
+.prose blockquote .callout-inner {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.prose blockquote .callout-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.prose blockquote .callout-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.prose blockquote .callout-content {
+  flex: 1;
+  min-width: 0;
+}
+.prose blockquote .callout-content p:first-child {
+  margin-top: 0;
+}
+.prose blockquote .callout-content p:last-child {
+  margin-bottom: 0;
+}
+
+.prose blockquote.callout-info {
+  border-left-color: #0ea5e9 !important;
+  background: #e0f2fe !important;
+  color: #0c4a6e !important;
+  font-style: normal;
+}
+.prose blockquote.callout-info .callout-icon {
+  color: #0284c7;
+}
+.dark .prose blockquote.callout-info {
+  background: rgba(14, 165, 233, 0.12) !important;
+  color: #7dd3fc !important;
+  border-left-color: #38bdf8 !important;
+}
+.dark .prose blockquote.callout-info .callout-icon {
+  color: #38bdf8;
+}
+
+.prose blockquote.callout-warning {
+  border-left-color: #d97706 !important;
+  background: #fef3c7 !important;
+  color: #78350f !important;
+  font-style: normal;
+}
+.prose blockquote.callout-warning .callout-icon {
+  color: #b45309;
+}
+.dark .prose blockquote.callout-warning {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #fcd34d !important;
+  border-left-color: #f59e0b !important;
+}
+.dark .prose blockquote.callout-warning .callout-icon {
+  color: #f59e0b;
+}
+
+.prose blockquote.callout-error {
+  border-left-color: #b91c1c !important;
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  font-style: normal;
+}
+.prose blockquote.callout-error .callout-icon {
+  color: #b91c1c;
+}
+.dark .prose blockquote.callout-error {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #fca5a5 !important;
+  border-left-color: #f87171 !important;
+}
+.dark .prose blockquote.callout-error .callout-icon {
+  color: #f87171;
+}
+
+/* Collapsibles: use in MD as raw HTML <details> / <summary> */
+.prose details {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  border-left: 3px solid var(--border);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: var(--muted);
+}
+.prose summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.35rem 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.prose summary::-webkit-details-marker {
+  display: none;
+}
+.prose summary::before {
+  content: "▶";
+  font-size: 0.65rem;
+  color: var(--muted-foreground);
+  transition: transform 0.2s ease;
+}
+.prose details[open] summary::before {
+  transform: rotate(90deg);
+}
+.prose details .details-content {
+  padding: 0.5rem 0 0.25rem 0;
+}
+.prose details > *:not(summary) {
+  margin-left: 0;
+  padding-right: 0;
+}
+.prose details > *:not(summary):first-of-type {
+  padding-top: 0.25rem;
 }
 
 .prose hr {

@@ -1,10 +1,16 @@
 # Override heading, description, excerpt, and more for blog posts.
 # Slug = filename without .md (e.g. getting-started for getting-started.md).
 # Optional "updated" (ISO date e.g. 2025-02-11) overrides file mtime for "Updated" on the page.
-# blogs:
+blogs:
+  - slug: kernel-vs-os
+    heading: Kernel vs Operating System
+    description: A simple comparison of kernel and OS in tabular format.
+    excerpt: Not sure how a kernel differs from an entire OS? A concise comparison in tabular format.
+    keywords: [linux, kernel, os, devops]
+    updated: "2026-02-28"
 #   - slug: getting-started
 #     heading: Getting Started
 #     description: Welcome to the DecypherLabs blog.
 #     excerpt: Welcome to the DecypherLabs blog. Articles on DevOps, development, and more.
 #     keywords: [devops, getting-started]
-    # updated: "2025-02-11"
+#     updated: "2025-02-11"

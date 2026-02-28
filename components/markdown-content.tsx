@@ -4,7 +4,8 @@ import { useRef, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Link2 } from "lucide-react";
+import rehypeRaw from "rehype-raw";
+import { Link2, Info, AlertTriangle, CircleAlert } from "lucide-react";
 import { slugify } from "@/lib/markdown-utils";
 import { highlightAllInElement } from "@/lib/hljs-client";
 import { CodeBlockWithCopy } from "@/components/code-block-with-copy";
@@ -17,7 +18,25 @@ type MarkdownContentProps = {
 function getTextFromChildren(children: React.ReactNode): string {
   if (typeof children === "string") return children;
   if (Array.isArray(children)) return children.map(getTextFromChildren).join("");
+  if (children && typeof children === "object" && "props" in children) {
+    const element = children as React.ReactElement<{ children?: React.ReactNode }>;
+    if (element.props?.children != null) {
+      return getTextFromChildren(element.props.children);
+    }
+  }
   return "";
+}
+
+/** Callout type if blockquote starts with Note/Info/Warning/Error */
+function getBlockquoteCalloutClass(children: React.ReactNode): string | undefined {
+  const text = getTextFromChildren(children).trim();
+  const m = text.match(/^(?:info|note|warning|error):\s*/i);
+  if (!m) return undefined;
+  const label = m[0].replace(/:?\s*$/, "").toLowerCase();
+  if (label === "warning") return "callout-warning";
+  if (label === "error") return "callout-error";
+  if (label === "info" || label === "note") return "callout-info";
+  return undefined;
 }
 
 function HeadingWithLink({
@@ -68,7 +87,36 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
     <div ref={containerRef} className="prose max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
+          blockquote({ children, ...rest }) {
+            const calloutClass = getBlockquoteCalloutClass(children);
+            const CalloutIcon =
+              calloutClass === "callout-info"
+                ? Info
+                : calloutClass === "callout-warning"
+                  ? AlertTriangle
+                  : calloutClass === "callout-error"
+                    ? CircleAlert
+                    : null;
+            return (
+              <blockquote
+                {...rest}
+                className={calloutClass ? `callout ${calloutClass}` : undefined}
+              >
+                {CalloutIcon ? (
+                  <span className="callout-inner">
+                    <span className="callout-icon-wrap">
+                      <CalloutIcon className="callout-icon" aria-hidden />
+                    </span>
+                    <span className="callout-content">{children}</span>
+                  </span>
+                ) : (
+                  children
+                )}
+              </blockquote>
+            );
+          },
           h2({ children }) {
             const text = getTextFromChildren(children);
             const id = slugify(text);

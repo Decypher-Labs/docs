@@ -1,8 +1,8 @@
 # Override heading, description, and keywords for doc sections.
 # Slug = folder name under static/docs/ (e.g. 01_docker).
 # Add folders under static/docs/ with .md files; list them here to customize.
-# docs:
-#   - slug: 01_docker
-#     heading: Docker
-#     description: Container basics and Dockerfile guides.
-#     keywords: [docker, containers, devops]
+docs:
+  - slug: linux
+    heading: Linux
+    description: Linux basics — kernel, shell, commands, processes, permissions, and DevOps essentials.
+    keywords: [linux,devops]
